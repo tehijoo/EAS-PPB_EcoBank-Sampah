@@ -1,6 +1,6 @@
 # EcoBank — Aplikasi Bank Sampah Digital
 
-Aplikasi Android untuk pengelolaan **Bank Sampah** berbasis sistem membership digital. Nasabah dapat mendaftar, menyetorkan sampah, mengumpulkan poin, dan menukar poin dengan reward. Pengelola bank sampah dapat mengelola seluruh data nasabah dan transaksi.
+Aplikasi Android untuk pengelolaan **Bank Sampah** berbasis sistem membership digital. User dapat mendaftar, menyetorkan sampah, mengumpulkan poin, dan menukar poin dengan reward. Pengelola bank sampah dapat mengelola seluruh data User dan transaksi.
 
 > Dikembangkan sebagai **Final Project** mata kuliah Pemrograman Perangkat Bergerak (PPB) menggunakan Kotlin + Jetpack Compose + Room Database + MVVM Architecture.
 
@@ -12,16 +12,16 @@ Aplikasi Android untuk pengelolaan **Bank Sampah** berbasis sistem membership di
 | Fitur | Deskripsi |
 |---|---|
 | Login Admin | Autentikasi dengan username & password |
-| Dashboard Member | Lihat total nasabah + daftar semua nasabah |
-| Tambah Nasabah | Registrasi nasabah baru (nama, email, nomor HP) |
-| Detail Nasabah | Lihat profil + poin + level nasabah |
-| Hapus Nasabah | Hapus data nasabah beserta riwayat transaksinya |
+| Dashboard Member | Lihat total User + daftar semua User |
+| Tambah User | Registrasi User baru (nama, email, nomor HP) |
+| Detail User | Lihat profil + poin + level User |
+| Hapus User | Hapus data User beserta riwayat transaksinya |
 | Katalog Sampah | Lihat jenis sampah dan nilai poin per kg |
 
-### Untuk Nasabah (Member)
+### Untuk User (Member)
 | Fitur | Deskripsi |
 |---|---|
-| Login / Daftar | Cari akun dengan nama/ID atau daftar sebagai nasabah baru |
+| Login / Daftar | Cari akun dengan nama/ID atau daftar sebagai User baru |
 | Kartu Member Digital | Tampilkan kartu membership digital (ID NSB, nama, level, poin) |
 | Setor Sampah | Pilih jenis sampah + input berat → poin dihitung otomatis |
 | Riwayat Transaksi | Lihat semua riwayat setor dan penukaran reward |
@@ -31,7 +31,7 @@ Aplikasi Android untuk pengelolaan **Bank Sampah** berbasis sistem membership di
 ### Sistem Poin
 - Setiap jenis sampah memiliki nilai poin berbeda per kg
 - Contoh: Kaleng Aluminium = 100 poin/kg, Botol Plastik = 50 poin/kg
-- Level nasabah otomatis naik berdasarkan total poin:
+- Level User otomatis naik berdasarkan total poin:
   - Pemula  — 0–199 poin
   - Aktif   — 200–499 poin
   - Champion — 500+ poin
@@ -106,7 +106,7 @@ Username : admin
 Password : ecobank123
 ```
 
-### Cara Login Nasabah
+### Cara Login User
 - Tab **Masuk** → ketik nama atau ID (NSB00001) → tap akun → masuk
 - Tab **Daftar Baru** → isi nama, email, nomor HP → daftar & langsung masuk
 
@@ -122,18 +122,18 @@ Password : ecobank123
       +---> [Login Pengelola]                            |
       |           |                                      |
       |     [Home / Dashboard]                           |
-      |           |-- Tambah Nasabah                     |
+      |           |-- Tambah User                     |
       |           |-- Katalog Sampah                     |
-      |           |-- Detail Nasabah                     |
+      |           |-- Detail User                     |
       |                   |-- Kartu Member               |
       |                   |-- Setor Sampah               |
       |                   |-- Riwayat Transaksi          |
       |                   |-- Tukar Reward               |
       |                   |-- Katalog Sampah             |
       |                                                  |
-      +---> [Login / Daftar Nasabah]                     |
+      +---> [Login / Daftar User]                     |
                   |                                      |
-            [Detail Nasabah (akun sendiri)]              |
+            [Detail User (akun sendiri)]              |
                    |-- Kartu Member                      |
                    |-- Setor Sampah                      |
                    |-- Riwayat Transaksi                 |
@@ -154,10 +154,10 @@ app/src/main/java/com/example/registrasisiswa/
 +-- data/
 |   +-- AppDatabase.kt                  # Room Database singleton (version 2)
 |   +-- entity/
-|   |   +-- Member.kt                   # Entity nasabah + formattedId() + level()
+|   |   +-- Member.kt                   # Entity User + formattedId() + level()
 |   |   +-- Transaction.kt              # Entity transaksi (SETOR/REDEEM)
 |   +-- dao/
-|   |   +-- MemberDao.kt                # CRUD + Flow queries untuk nasabah
+|   |   +-- MemberDao.kt                # CRUD + Flow queries untuk User
 |   |   +-- TransactionDao.kt           # Insert + query transaksi per member
 |   +-- repository/
 |       +-- EcoBankRepository.kt        # Business logic poin & redeem reward
@@ -172,12 +172,12 @@ app/src/main/java/com/example/registrasisiswa/
     |   +-- NavGraph.kt                 # 12 routes, NavHost, sealed class Screen
     +-- screens/
     |   +-- SplashScreen.kt             # Animasi logo dengan spring + tween
-    |   +-- RoleSelectionScreen.kt      # Pilih role: Pengelola / Nasabah
+    |   +-- RoleSelectionScreen.kt      # Pilih role: Pengelola / User
     |   +-- AdminLoginScreen.kt         # Form login username + password
-    |   +-- NasabahLoginScreen.kt       # Cari akun / daftar nasabah baru
-    |   +-- HomeScreen.kt               # Dashboard admin: list semua nasabah
-    |   +-- AddMemberScreen.kt          # Form tambah nasabah (admin only)
-    |   +-- MemberDetailScreen.kt       # Profil nasabah + grid menu aksi
+    |   +-- UserLoginScreen.kt       # Cari akun / daftar User baru
+    |   +-- HomeScreen.kt               # Dashboard admin: list semua User
+    |   +-- AddMemberScreen.kt          # Form tambah User (admin only)
+    |   +-- MemberDetailScreen.kt       # Profil User + grid menu aksi
     |   +-- MemberCardScreen.kt         # Kartu member digital
     |   +-- AddTransactionScreen.kt     # Pilih jenis sampah + input berat
     |   +-- TransactionHistoryScreen.kt # Riwayat SETOR & REDEEM
@@ -209,8 +209,8 @@ app/src/main/res/
 | Field | Type | Keterangan |
 |---|---|---|
 | id | INTEGER | Primary Key, auto generate |
-| name | TEXT | Nama lengkap nasabah |
-| email | TEXT | Email nasabah |
+| name | TEXT | Nama lengkap User |
+| email | TEXT | Email User |
 | phone | TEXT | Nomor HP |
 | points | INTEGER | Total poin (default 0) |
 | joinDate | TEXT | Tanggal bergabung (dd/MM/yyyy) |
@@ -232,7 +232,7 @@ app/src/main/res/
 
 | Requirement | Status | Implementasi |
 |---|---|---|
-| Registrasi member | DONE | AddMemberScreen + NasabahLoginScreen (tab Daftar) |
+| Registrasi member | DONE | AddMemberScreen + UserLoginScreen (tab Daftar) |
 | Data tersimpan di Room Database | DONE | AppDatabase + MemberDao + TransactionDao |
 | Membership card tampil | DONE | MemberCardScreen |
 | Poin dihitung otomatis | DONE | EcoBankRepository.addWasteTransaction() |
