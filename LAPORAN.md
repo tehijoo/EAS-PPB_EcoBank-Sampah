@@ -9,7 +9,7 @@
 | **Platform** | Android |
 | **Versi** | 1.0 |
 | **Nama Mahasiswa** | Alya Rahmatillah Machmud |
-| **Mata Kuliah** | Pemrograman Perangkat Bergerak (PPB) |
+| **Mata Kuliah** | Pemrograman Perangkat Bergerak (PPB) C |
 
 ---
 
