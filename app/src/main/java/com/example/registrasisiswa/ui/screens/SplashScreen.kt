@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,15 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldDeep
+import com.example.registrasisiswa.ui.theme.White
 import kotlinx.coroutines.delay
 
 @Composable
@@ -62,9 +56,7 @@ fun SplashScreen(onNavigateToHome: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(colors = listOf(RoseGold, RoseGoldDark, RoseGoldDeep))
-            ),
+            .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -74,23 +66,11 @@ fun SplashScreen(onNavigateToHome: () -> Unit) {
                 .alpha(alpha)
                 .scale(scale)
         ) {
-            Surface(
-                modifier = Modifier.size(110.dp),
-                shape = CircleShape,
-                color = Color.White.copy(alpha = 0.18f)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text(text = "♻️", fontSize = 56.sp)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(28.dp))
-
             Text(
                 text = "ECOBANK",
                 fontSize = 38.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color.White,
+                color = White,
                 letterSpacing = 6.sp
             )
 
@@ -99,7 +79,7 @@ fun SplashScreen(onNavigateToHome: () -> Unit) {
             Text(
                 text = "Bank Sampah Digital",
                 fontSize = 15.sp,
-                color = Color.White.copy(alpha = 0.85f),
+                color = White.copy(alpha = 0.85f),
                 letterSpacing = 2.sp,
                 fontWeight = FontWeight.Light
             )
@@ -107,7 +87,7 @@ fun SplashScreen(onNavigateToHome: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Row {
-                listOf("♻️", "🌱", "🌍").forEach {
+                listOf("🌱", "🌍").forEach {
                     Text(it, fontSize = 18.sp, modifier = Modifier.padding(horizontal = 4.dp))
                 }
             }
@@ -117,7 +97,7 @@ fun SplashScreen(onNavigateToHome: () -> Unit) {
             Text(
                 text = "\"Sampah Jadi Poin, Bumi Jadi Bersih\"",
                 fontSize = 11.sp,
-                color = Color.White.copy(alpha = 0.55f),
+                color = White.copy(alpha = 0.55f),
                 fontStyle = FontStyle.Italic
             )
         }

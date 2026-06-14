@@ -17,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,47 +29,44 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.registrasisiswa.data.entity.Pengguna
 import com.example.registrasisiswa.data.entity.formattedId
 import com.example.registrasisiswa.data.entity.level
-import com.example.registrasisiswa.ui.theme.BackgroundCream
+import com.example.registrasisiswa.ui.theme.Black
 import com.example.registrasisiswa.ui.theme.GoldLevel
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldDeep
 import com.example.registrasisiswa.ui.theme.SilverLevel
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MemberCardScreen(
+fun PenggunaCardScreen(
     viewModel: EcoBankViewModel,
     onNavigateBack: () -> Unit
 ) {
-    val member by viewModel.currentMember.collectAsState()
+    val pengguna by viewModel.currentPengguna.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Kartu Nasabah", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Kartu Pengguna", color = White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
-        member?.let { m ->
+        pengguna?.let { p ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -85,11 +83,7 @@ fun MemberCardScreen(
                         .fillMaxWidth()
                         .height(210.dp)
                         .clip(RoundedCornerShape(24.dp))
-                        .background(
-                            Brush.linearGradient(
-                                colors = listOf(RoseGold, RoseGoldDark, RoseGoldDeep, Color(0xFF3A1F28))
-                            )
-                        )
+                        .background(MaterialTheme.colorScheme.primary)
                         .padding(24.dp)
                 ) {
                     // Top: brand
@@ -103,26 +97,26 @@ fun MemberCardScreen(
                                 "ECOBANK",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = Color.White,
+                                color = White,
                                 letterSpacing = 3.sp
                             )
                             Text(
                                 "BANK SAMPAH DIGITAL",
                                 fontSize = 7.5.sp,
-                                color = Color.White.copy(alpha = 0.7f),
+                                color = White.copy(alpha = 0.7f),
                                 letterSpacing = 1.5.sp
                             )
                         }
-                        Text("♻️", fontSize = 30.sp)
+                        Text("🌱", fontSize = 30.sp)
                     }
 
                     // Center: name
                     Column(modifier = Modifier.align(Alignment.CenterStart)) {
                         Text(
-                            text = m.name.uppercase(),
+                            text = p.name.uppercase(),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Color.White,
+                            color = White,
                             letterSpacing = 1.sp
                         )
                     }
@@ -134,12 +128,12 @@ fun MemberCardScreen(
                         verticalAlignment = Alignment.Bottom
                     ) {
                         Column {
-                            Text("NASABAH ID", fontSize = 8.sp, color = Color.White.copy(alpha = 0.65f), letterSpacing = 1.sp)
-                            Text(m.formattedId(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                            Text("PENGGUNA ID", fontSize = 8.sp, color = White.copy(alpha = 0.65f), letterSpacing = 1.sp)
+                            Text(p.formattedId(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = White)
                         }
                         Column(horizontalAlignment = Alignment.End) {
                             Surface(
-                                color = when (m.level()) {
+                                color = when (p.level()) {
                                     "Champion" -> GoldLevel.copy(alpha = 0.9f)
                                     "Aktif" -> SilverLevel.copy(alpha = 0.85f)
                                     else -> Color(0xFF4CAF50).copy(alpha = 0.85f)
@@ -147,44 +141,44 @@ fun MemberCardScreen(
                                 shape = RoundedCornerShape(6.dp)
                             ) {
                                 Text(
-                                    text = when (m.level()) {
+                                    text = when (p.level()) {
                                         "Champion" -> "🏆 CHAMPION"
                                         "Aktif" -> "⭐ AKTIF"
                                         else -> "🌱 PEMULA"
                                     },
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.White,
+                                    color = White,
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text("${m.points} POIN", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold, color = Color.White)
+                            Text("${p.points} POIN", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold, color = White)
                         }
                     }
                 }
 
                 // Info cards
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    InfoCardSmall(Modifier.weight(1f), "⭐", "Total Poin", "${m.points}")
+                    InfoCardSmall(Modifier.weight(1f), "⭐", "Total Poin", "${p.points}")
                     InfoCardSmall(
                         Modifier.weight(1f),
-                        when (m.level()) { "Champion" -> "🏆"; "Aktif" -> "⭐"; else -> "🌱" },
+                        when (p.level()) { "Champion" -> "🏆"; "Aktif" -> "⭐"; else -> "🌱" },
                         "Level",
-                        m.level()
+                        p.level()
                     )
-                    InfoCardSmall(Modifier.weight(1f), "📅", "Bergabung", m.joinDate)
+                    InfoCardSmall(Modifier.weight(1f), "📅", "Bergabung", p.joinDate)
                 }
 
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
-                    color = RoseGold.copy(alpha = 0.08f)
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                 ) {
                     Text(
-                        text = "♻️ Kumpulkan poin dari setiap setoran sampah\nTukar poin dengan reward menarik!",
+                        text = "🌱 Kumpulkan poin dari setiap setoran sampah\nTukar poin dengan reward menarik!",
                         fontSize = 12.sp,
-                        color = RoseGoldDark,
+                        color = Black.copy(alpha = 0.7f),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp),
                         fontStyle = FontStyle.Italic
@@ -192,19 +186,19 @@ fun MemberCardScreen(
                 }
             }
         } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = RoseGold)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
 }
 
 @Composable
 fun InfoCardSmall(modifier: Modifier = Modifier, emoji: String, label: String, value: String) {
-    Surface(modifier = modifier, shape = RoundedCornerShape(12.dp), color = Color.White, shadowElevation = 1.dp) {
+    Surface(modifier = modifier, shape = RoundedCornerShape(12.dp), color = White, shadowElevation = 1.dp) {
         Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = emoji, fontSize = 20.sp)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.ExtraBold, color = RoseGoldDark)
-            Text(text = label, fontSize = 9.sp, color = MediumText, textAlign = TextAlign.Center)
+            Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.ExtraBold, color = Black)
+            Text(text = label, fontSize = 9.sp, color = Black.copy(alpha = 0.5f), textAlign = TextAlign.Center)
         }
     }
 }

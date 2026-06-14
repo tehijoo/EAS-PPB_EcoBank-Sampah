@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -40,18 +41,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldLight
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.Black
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMemberScreen(
+fun AddPenggunaScreen(
     viewModel: EcoBankViewModel,
     onNavigateBack: () -> Unit
 ) {
@@ -80,16 +76,16 @@ fun AddMemberScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Daftar Nasabah Baru", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Tambah Pengguna", color = White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -101,18 +97,18 @@ fun AddMemberScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            Surface(modifier = Modifier.size(90.dp), shape = CircleShape, color = RoseGoldLight) {
+            Surface(modifier = Modifier.size(90.dp), shape = CircleShape, color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(text = "♻️", fontSize = 44.sp)
+                    Text(text = "👤", fontSize = 44.sp)
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Daftarkan nasabah baru\nBank Sampah EcoBank",
+                text = "Daftarkan pengguna baru\nBank Sampah EcoBank",
                 fontSize = 13.sp,
-                color = MediumText,
+                color = Black.copy(alpha = 0.6f),
                 textAlign = TextAlign.Center
             )
 
@@ -121,11 +117,11 @@ fun AddMemberScreen(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = SurfaceWhite,
+                color = White,
                 shadowElevation = 2.dp
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    Text("Data Nasabah", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = DarkText)
+                    Text("Data Pengguna", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Black)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
@@ -138,9 +134,9 @@ fun AddMemberScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = RoseGold,
-                            focusedLabelColor = RoseGold,
-                            cursorColor = RoseGold
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            cursorColor = MaterialTheme.colorScheme.primary
                         ),
                         singleLine = true
                     )
@@ -158,9 +154,9 @@ fun AddMemberScreen(
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = RoseGold,
-                            focusedLabelColor = RoseGold,
-                            cursorColor = RoseGold
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            cursorColor = MaterialTheme.colorScheme.primary
                         ),
                         singleLine = true
                     )
@@ -178,9 +174,9 @@ fun AddMemberScreen(
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = RoseGold,
-                            focusedLabelColor = RoseGold,
-                            cursorColor = RoseGold
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            cursorColor = MaterialTheme.colorScheme.primary
                         ),
                         singleLine = true
                     )
@@ -192,15 +188,15 @@ fun AddMemberScreen(
             Button(
                 onClick = {
                     if (validate()) {
-                        viewModel.addMember(name, email, phone)
+                        viewModel.addPengguna(name, email, phone)
                         onNavigateBack()
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(52.dp),
                 shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = RoseGoldDark)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("✓  Daftar Sekarang", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                Text("✓  Daftar Sekarang", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = White)
             }
         }
     }

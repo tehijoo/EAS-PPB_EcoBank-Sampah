@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.registrasisiswa.data.dao.MemberDao
+import com.example.registrasisiswa.data.dao.PenggunaDao
 import com.example.registrasisiswa.data.dao.TransactionDao
-import com.example.registrasisiswa.data.entity.Member
+import com.example.registrasisiswa.data.entity.Pengguna
 import com.example.registrasisiswa.data.entity.Transaction
 
-@Database(entities = [Member::class, Transaction::class], version = 2, exportSchema = false)
+@Database(entities = [Pengguna::class, Transaction::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun memberDao(): MemberDao
+    abstract fun penggunaDao(): PenggunaDao
     abstract fun transactionDao(): TransactionDao
 
     companion object {

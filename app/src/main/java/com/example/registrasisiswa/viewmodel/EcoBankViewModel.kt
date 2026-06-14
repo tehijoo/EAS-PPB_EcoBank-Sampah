@@ -3,7 +3,7 @@ package com.example.registrasisiswa.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.registrasisiswa.data.entity.Member
+import com.example.registrasisiswa.data.entity.Pengguna
 import com.example.registrasisiswa.data.repository.EcoBankRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,33 +17,33 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-enum class UserRole { ADMIN, NASABAH }
+enum class UserRole { ADMIN, PENGGUNA }
 
 class EcoBankViewModel(private val repository: EcoBankRepository) : ViewModel() {
 
-    val allMembers = repository.getAllMembers()
+    val allPengguna = repository.getAllPengguna()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val totalMembers = repository.getTotalMembers()
+    val totalPengguna = repository.getTotalPengguna()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     // Auth state
     private val _userRole = MutableStateFlow<UserRole?>(null)
     val userRole = _userRole.asStateFlow()
 
-    private val _currentMemberId = MutableStateFlow(-1)
+    private val _currentPenggunaId = MutableStateFlow(-1)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val currentMember = _currentMemberId
+    val currentPengguna = _currentPenggunaId
         .flatMapLatest { id ->
-            if (id == -1) flowOf(null) else repository.getMemberById(id)
+            if (id == -1) flowOf(null) else repository.getPenggunaById(id)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val currentTransactions = _currentMemberId
+    val currentTransactions = _currentPenggunaId
         .flatMapLatest { id ->
-            if (id == -1) flowOf(emptyList()) else repository.getTransactionsByMemberId(id)
+            if (id == -1) flowOf(emptyList()) else repository.getTransactionsByPenggunaId(id)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -54,58 +54,58 @@ class EcoBankViewModel(private val repository: EcoBankRepository) : ViewModel() 
         _userRole.value = UserRole.ADMIN
     }
 
-    fun loginAsNasabah(memberId: Int) {
-        _userRole.value = UserRole.NASABAH
-        selectMember(memberId)
+    fun loginAsPengguna(penggunaId: Int) {
+        _userRole.value = UserRole.PENGGUNA
+        selectPengguna(penggunaId)
     }
 
     fun logout() {
         _userRole.value = null
-        _currentMemberId.value = -1
+        _currentPenggunaId.value = -1
     }
 
-    fun selectMember(id: Int) {
-        _currentMemberId.value = id
+    fun selectPengguna(id: Int) {
+        _currentPenggunaId.value = id
     }
 
-    fun addMember(name: String, email: String, phone: String) {
+    fun addPengguna(name: String, email: String, phone: String) {
         viewModelScope.launch {
             val date = SimpleDateFormat("dd/MM/yyyy", Locale("id", "ID")).format(Date())
-            repository.insertMember(
-                Member(name = name.trim(), email = email.trim(), phone = phone.trim(), joinDate = date)
+            repository.insertPengguna(
+                Pengguna(name = name.trim(), email = email.trim(), phone = phone.trim(), joinDate = date)
             )
-            _uiMessage.value = "Nasabah berhasil didaftarkan!"
+            _uiMessage.value = "Pengguna berhasil didaftarkan!"
         }
     }
 
-    // Digunakan oleh nasabah saat daftar baru — langsung login setelah daftar
-    fun registerAndLoginAsNasabah(
+    // Digunakan oleh pengguna saat daftar baru — langsung login setelah daftar
+    fun registerAndLoginAsPengguna(
         name: String,
         email: String,
         phone: String,
-        onSuccess: (memberId: Int) -> Unit
+        onSuccess: (penggunaId: Int) -> Unit
     ) {
         viewModelScope.launch {
             val date = SimpleDateFormat("dd/MM/yyyy", Locale("id", "ID")).format(Date())
-            val id = repository.insertMemberAndGetId(
-                Member(name = name.trim(), email = email.trim(), phone = phone.trim(), joinDate = date)
+            val id = repository.insertPenggunaAndGetId(
+                Pengguna(name = name.trim(), email = email.trim(), phone = phone.trim(), joinDate = date)
             )
-            loginAsNasabah(id)
+            loginAsPengguna(id)
             onSuccess(id)
         }
     }
 
-    fun addTransaction(member: Member, wasteType: String, weightGrams: Double, pointsPerKg: Int) {
+    fun addTransaction(pengguna: Pengguna, wasteType: String, weightGrams: Double, pointsPerKg: Int) {
         viewModelScope.launch {
-            repository.addWasteTransaction(member, wasteType, weightGrams, pointsPerKg)
+            repository.addWasteTransaction(pengguna, wasteType, weightGrams, pointsPerKg)
             val points = (weightGrams * pointsPerKg / 1000).toInt()
             _uiMessage.value = "Setor berhasil! +$points poin"
         }
     }
 
-    fun redeemReward(member: Member, rewardName: String, pointCost: Int) {
+    fun redeemReward(pengguna: Pengguna, rewardName: String, pointCost: Int) {
         viewModelScope.launch {
-            val success = repository.redeemReward(member, pointCost, rewardName)
+            val success = repository.redeemReward(pengguna, pointCost, rewardName)
             _uiMessage.value = if (success)
                 "Selamat! $rewardName berhasil ditukar!"
             else
@@ -113,9 +113,9 @@ class EcoBankViewModel(private val repository: EcoBankRepository) : ViewModel() 
         }
     }
 
-    fun deleteMember(member: Member) {
+    fun deletePengguna(pengguna: Pengguna) {
         viewModelScope.launch {
-            repository.deleteMember(member)
+            repository.deletePengguna(pengguna)
         }
     }
 

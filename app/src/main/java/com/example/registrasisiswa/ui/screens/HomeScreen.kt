@@ -28,6 +28,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,42 +39,35 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.registrasisiswa.data.entity.Member
+import com.example.registrasisiswa.data.entity.Pengguna
 import com.example.registrasisiswa.data.entity.formattedId
 import com.example.registrasisiswa.data.entity.level
-import com.example.registrasisiswa.ui.theme.BackgroundCream
+import com.example.registrasisiswa.ui.theme.Black
 import com.example.registrasisiswa.ui.theme.BronzeLevel
 import com.example.registrasisiswa.ui.theme.BronzeLevelBg
-import com.example.registrasisiswa.ui.theme.DarkText
 import com.example.registrasisiswa.ui.theme.GoldLevel
 import com.example.registrasisiswa.ui.theme.GoldLevelBg
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldLight
+import com.example.registrasisiswa.ui.theme.KatalogBg
 import com.example.registrasisiswa.ui.theme.SilverLevel
 import com.example.registrasisiswa.ui.theme.SilverLevelBg
-import com.example.registrasisiswa.ui.theme.SuccessGreen
-import com.example.registrasisiswa.ui.theme.SuccessGreenBg
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: EcoBankViewModel,
-    onNavigateToAddMember: () -> Unit,
+    onNavigateToAddPengguna: () -> Unit,
     onNavigateToWasteCatalog: () -> Unit,
-    onNavigateToMemberDetail: (Int) -> Unit,
+    onNavigateToPenggunaDetail: (Int) -> Unit,
     onLogout: () -> Unit
 ) {
-    val members by viewModel.allMembers.collectAsState()
-    val totalMembers by viewModel.totalMembers.collectAsState()
+    val penggunaList by viewModel.allPengguna.collectAsState()
+    val totalPengguna by viewModel.totalPengguna.collectAsState()
 
     Scaffold(
         topBar = {
@@ -83,36 +77,36 @@ fun HomeScreen(
                         Text(
                             text = "EcoBank",
                             fontWeight = FontWeight.ExtraBold,
-                            color = Color.White,
+                            color = White,
                             fontSize = 20.sp
                         )
                         Text(
                             text = "Bank Sampah Digital",
                             fontSize = 11.sp,
-                            color = Color.White.copy(alpha = 0.8f),
+                            color = White.copy(alpha = 0.8f),
                             letterSpacing = 0.5.sp
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
                 actions = {
                     IconButton(onClick = onLogout) {
-                        Icon(Icons.Default.ExitToApp, contentDescription = "Keluar", tint = Color.White)
+                        Icon(Icons.Default.ExitToApp, contentDescription = "Keluar", tint = White)
                     }
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onNavigateToAddMember,
-                containerColor = RoseGold,
-                contentColor = Color.White,
+                onClick = onNavigateToAddPengguna,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = White,
                 shape = CircleShape
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Tambah Nasabah")
+                Icon(Icons.Default.Add, contentDescription = "Tambah Pengguna")
             }
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -122,14 +116,11 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
-                // Stats gradient card
+                // Stats card
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(
-                            Brush.horizontalGradient(colors = listOf(RoseGold, RoseGoldDark)),
-                            RoundedCornerShape(20.dp)
-                        )
+                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(20.dp))
                         .padding(24.dp)
                 ) {
                     Row(
@@ -138,14 +129,14 @@ fun HomeScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text("Total Nasabah", fontSize = 13.sp, color = Color.White.copy(alpha = 0.8f))
+                            Text("Total Pengguna", fontSize = 13.sp, color = White.copy(alpha = 0.8f))
                             Text(
-                                text = "$totalMembers",
+                                text = "$totalPengguna",
                                 fontSize = 44.sp,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = Color.White
+                                color = White
                             )
-                            Text("Nasabah Aktif", fontSize = 11.sp, color = Color.White.copy(alpha = 0.65f))
+                            Text("Pengguna Aktif", fontSize = 11.sp, color = White.copy(alpha = 0.65f))
                         }
                         Text(text = "👥", fontSize = 52.sp)
                     }
@@ -159,7 +150,7 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .clickable(onClick = onNavigateToWasteCatalog),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = SuccessGreenBg),
+                    colors = CardDefaults.cardColors(containerColor = KatalogBg),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Row(
@@ -170,26 +161,24 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = "♻️", fontSize = 32.sp)
-                            Spacer(modifier = Modifier.width(12.dp))
                             Column {
                                 Text(
                                     text = "Katalog Sampah",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 14.sp,
-                                    color = SuccessGreen
+                                    color = Black
                                 )
                                 Text(
                                     text = "Lihat jenis sampah & nilai poinnya",
                                     fontSize = 12.sp,
-                                    color = SuccessGreen.copy(alpha = 0.75f)
+                                    color = Black.copy(alpha = 0.6f)
                                 )
                             }
                         }
                         Icon(
                             Icons.Default.KeyboardArrowRight,
                             contentDescription = null,
-                            tint = SuccessGreen
+                            tint = Black
                         )
                     }
                 }
@@ -202,16 +191,16 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Daftar Nasabah",
+                        text = "Daftar Pengguna",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
-                        color = DarkText
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-                    Text(text = "${members.size} nasabah", fontSize = 12.sp, color = MediumText)
+                    Text(text = "${penggunaList.size} pengguna", fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
                 }
             }
 
-            if (members.isEmpty()) {
+            if (penggunaList.isEmpty()) {
                 item {
                     Box(
                         modifier = Modifier
@@ -220,18 +209,18 @@ fun HomeScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = "♻️", fontSize = 52.sp)
+                            Text(text = "🌱", fontSize = 52.sp)
                             Spacer(modifier = Modifier.height(12.dp))
-                            Text("Belum ada nasabah", color = MediumText, fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                            Text("Tap tombol + untuk mendaftarkan nasabah", color = MediumText.copy(alpha = 0.65f), fontSize = 12.sp)
+                            Text("Belum ada pengguna", color = Black, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            Text("Tap tombol + untuk mendaftarkan pengguna", color = Black.copy(alpha = 0.5f), fontSize = 12.sp)
                         }
                     }
                 }
             } else {
-                items(members) { member ->
-                    MemberListItem(
-                        member = member,
-                        onClick = { onNavigateToMemberDetail(member.id) }
+                items(penggunaList) { pengguna ->
+                    PenggunaListItem(
+                        pengguna = pengguna,
+                        onClick = { onNavigateToPenggunaDetail(pengguna.id) }
                     )
                 }
             }
@@ -242,13 +231,13 @@ fun HomeScreen(
 }
 
 @Composable
-fun MemberListItem(member: Member, onClick: () -> Unit) {
+fun PenggunaListItem(pengguna: Pengguna, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -260,29 +249,29 @@ fun MemberListItem(member: Member, onClick: () -> Unit) {
             Box(
                 modifier = Modifier
                     .size(52.dp)
-                    .background(RoseGoldLight, CircleShape),
+                    .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = member.name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                    text = pengguna.name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = RoseGoldDark
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Spacer(modifier = Modifier.width(14.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = member.name, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = DarkText)
-                Text(text = member.formattedId(), fontSize = 11.sp, color = MediumText)
+                Text(text = pengguna.name, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = Black)
+                Text(text = pengguna.formattedId(), fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                 Spacer(modifier = Modifier.height(5.dp))
-                LevelBadge(level = member.level())
+                LevelBadge(level = pengguna.level())
             }
 
             Column(horizontalAlignment = Alignment.End) {
-                Text(text = "${member.points}", fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, color = RoseGold)
-                Text(text = "poin", fontSize = 11.sp, color = MediumText)
+                Text(text = "${pengguna.points}", fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
+                Text(text = "poin", fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
             }
         }
     }

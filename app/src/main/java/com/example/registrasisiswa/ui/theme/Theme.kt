@@ -11,28 +11,19 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val EcoBankColorScheme = lightColorScheme(
-    primary = RoseGold,
-    onPrimary = OnRoseGold,
-    primaryContainer = RoseGoldLight,
-    onPrimaryContainer = OnRoseGoldLight,
-    secondary = WarmMauve,
-    onSecondary = OnWarmMauve,
-    secondaryContainer = WarmMauveLight,
-    onSecondaryContainer = Color(0xFF340B27),
-    tertiary = GoldenBrown,
-    onTertiary = Color.White,
-    tertiaryContainer = GoldenBrownLight,
-    onTertiaryContainer = Color(0xFF2C1700),
-    background = BackgroundCream,
-    onBackground = DarkText,
-    surface = SurfaceWhite,
-    onSurface = DarkText,
-    surfaceVariant = SurfaceVariantRose,
-    onSurfaceVariant = MediumText,
-    error = ErrorRed,
-    onError = Color.White,
-    errorContainer = ErrorRedBg,
-    onErrorContainer = Color(0xFF410002),
+    primary = Color(0xFF427329),
+    secondary = Color(0xFFA3CD91),
+    background = Color.White,
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.Black,
+    onSurface = Color.Black,
+    // Optional: map other fields to maintain a consistent look
+    primaryContainer = Color(0xFFA3CD91),
+    onPrimaryContainer = Color.Black,
+    surfaceVariant = Color(0xFFF3E9D7), // Use Pengguna Card color as variant
+    onSurfaceVariant = Color.Black
 )
 
 @Composable

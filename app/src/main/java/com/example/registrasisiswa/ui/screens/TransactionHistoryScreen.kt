@@ -20,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,15 +36,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.registrasisiswa.data.entity.Transaction
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
+import com.example.registrasisiswa.ui.theme.Black
 import com.example.registrasisiswa.ui.theme.ErrorRed
 import com.example.registrasisiswa.ui.theme.ErrorRedBg
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
 import com.example.registrasisiswa.ui.theme.SuccessGreen
 import com.example.registrasisiswa.ui.theme.SuccessGreenBg
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +51,7 @@ fun TransactionHistoryScreen(
     onNavigateBack: () -> Unit
 ) {
     val transactions by viewModel.currentTransactions.collectAsState()
-    val member by viewModel.currentMember.collectAsState()
+    val pengguna by viewModel.currentPengguna.collectAsState()
 
     val totalSetor = transactions.count { it.type == "SETOR" }
     val totalKg = transactions.filter { it.type == "SETOR" }.sumOf { it.amount } / 1000.0
@@ -61,40 +59,40 @@ fun TransactionHistoryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Riwayat Setor", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Riwayat Setor", color = White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
             // Summary header
-            member?.let { m ->
+            pengguna?.let { p ->
                 Surface(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
                     shape = RoundedCornerShape(14.dp),
-                    color = RoseGold.copy(alpha = 0.12f)
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("${m.points}", fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = RoseGold)
-                            Text("Total Poin", fontSize = 11.sp, color = MediumText)
+                            Text("${p.points}", fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = MaterialTheme.colorScheme.primary)
+                            Text("Total Poin", fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("$totalSetor", fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = RoseGold)
-                            Text("Kali Setor", fontSize = 11.sp, color = MediumText)
+                            Text("$totalSetor", fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = MaterialTheme.colorScheme.primary)
+                            Text("Kali Setor", fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("%.1f".format(totalKg), fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = RoseGold)
-                            Text("Total (kg)", fontSize = 11.sp, color = MediumText)
+                            Text("%.1f".format(totalKg), fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = MaterialTheme.colorScheme.primary)
+                            Text("Total (kg)", fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                         }
                     }
                 }
@@ -103,10 +101,10 @@ fun TransactionHistoryScreen(
             if (transactions.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("♻️", fontSize = 52.sp)
+                        Text("🌱", fontSize = 52.sp)
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text("Belum ada riwayat setor", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MediumText)
-                        Text("Mulai setor sampah dan kumpulkan poin!", fontSize = 12.sp, color = MediumText.copy(alpha = 0.7f))
+                        Text("Belum ada riwayat setor", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Black)
+                        Text("Mulai setor sampah dan kumpulkan poin!", fontSize = 12.sp, color = Black.copy(alpha = 0.5f))
                     }
                 }
             } else {
@@ -134,7 +132,7 @@ fun TransactionItem(transaction: Transaction) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = White),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
@@ -143,26 +141,26 @@ fun TransactionItem(transaction: Transaction) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = if (isSetor) "♻️" else "🎁", fontSize = 28.sp)
+                Text(text = if (isSetor) "🌱" else "🎁", fontSize = 28.sp)
                 Column(modifier = Modifier.padding(start = 12.dp)) {
                     Text(
                         text = if (isSetor && transaction.description.isNotEmpty())
                             transaction.description else if (isSetor) "Setor Sampah" else "Redeem Reward",
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
-                        color = DarkText
+                        color = Black
                     )
                     if (isSetor && transaction.amount > 0) {
                         Text(
                             text = "${transaction.amount.toInt()} gram",
                             fontSize = 12.sp,
-                            color = MediumText
+                            color = Black.copy(alpha = 0.6f)
                         )
                     }
                     if (!isSetor && transaction.description.isNotEmpty()) {
-                        Text(transaction.description, fontSize = 12.sp, color = MediumText)
+                        Text(transaction.description, fontSize = 12.sp, color = Black.copy(alpha = 0.6f))
                     }
-                    Text(text = transaction.date, fontSize = 11.sp, color = MediumText.copy(alpha = 0.7f))
+                    Text(text = transaction.date, fontSize = 11.sp, color = Black.copy(alpha = 0.4f))
                 }
             }
 

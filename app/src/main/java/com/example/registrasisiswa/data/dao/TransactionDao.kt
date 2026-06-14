@@ -12,6 +12,6 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction)
 
-    @Query("SELECT * FROM transactions WHERE memberId = :memberId ORDER BY id DESC")
-    fun getTransactionsByMemberId(memberId: Int): Flow<List<Transaction>>
+    @Query("SELECT * FROM transactions WHERE penggunaId = :penggunaId ORDER BY id DESC")
+    fun getTransactionsByPenggunaId(penggunaId: Int): Flow<List<Transaction>>
 }

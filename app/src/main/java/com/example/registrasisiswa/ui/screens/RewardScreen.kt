@@ -22,6 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -46,18 +47,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.registrasisiswa.ui.model.ECO_REWARDS
 import com.example.registrasisiswa.ui.model.EcoReward
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
+import com.example.registrasisiswa.ui.theme.Black
 import com.example.registrasisiswa.ui.theme.ErrorRed
 import com.example.registrasisiswa.ui.theme.GoldLevel
 import com.example.registrasisiswa.ui.theme.GoldLevelBg
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldLight
 import com.example.registrasisiswa.ui.theme.SuccessGreen
 import com.example.registrasisiswa.ui.theme.SuccessGreenBg
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +62,7 @@ fun RewardScreen(
     viewModel: EcoBankViewModel,
     onNavigateBack: () -> Unit
 ) {
-    val member by viewModel.currentMember.collectAsState()
+    val pengguna by viewModel.currentPengguna.collectAsState()
     val uiMessage by viewModel.uiMessage.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     var selectedReward by remember { mutableStateOf<EcoReward?>(null) }
@@ -86,9 +82,9 @@ fun RewardScreen(
                 Column {
                     Text("${selectedReward!!.emoji}  ${selectedReward!!.name}", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text("Tukar ${selectedReward!!.pointCost} poin dengan ${selectedReward!!.name}?", color = MediumText, fontSize = 14.sp)
+                    Text("Tukar ${selectedReward!!.pointCost} poin dengan ${selectedReward!!.name}?", color = Black.copy(alpha = 0.7f), fontSize = 14.sp)
                     Spacer(modifier = Modifier.height(4.dp))
-                    member?.let {
+                    pengguna?.let {
                         val remaining = it.points - selectedReward!!.pointCost
                         Text(
                             "Poin tersisa: $remaining",
@@ -102,14 +98,14 @@ fun RewardScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        member?.let { m ->
-                            viewModel.redeemReward(m, selectedReward!!.name, selectedReward!!.pointCost)
+                        pengguna?.let { p ->
+                            viewModel.redeemReward(p, selectedReward!!.name, selectedReward!!.pointCost)
                         }
                         selectedReward = null
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = RoseGold)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Ya, Tukar!", color = Color.White)
+                    Text("Ya, Tukar!", color = White)
                 }
             },
             dismissButton = {
@@ -121,19 +117,19 @@ fun RewardScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Tukar Reward", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Tukar Reward", color = White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
-        member?.let { m ->
+        pengguna?.let { p ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(paddingValues),
                 contentPadding = PaddingValues(16.dp),
@@ -144,15 +140,15 @@ fun RewardScreen(
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(20.dp),
-                        color = RoseGold
+                        color = MaterialTheme.colorScheme.primary
                     ) {
                         Column(
                             modifier = Modifier.padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text("⭐", fontSize = 36.sp)
-                            Text("${m.points}", fontSize = 48.sp, fontWeight = FontWeight.ExtraBold, color = Color.White)
-                            Text("Poin Tersedia", fontSize = 14.sp, color = Color.White.copy(alpha = 0.85f))
+                            Text("${p.points}", fontSize = 48.sp, fontWeight = FontWeight.ExtraBold, color = White)
+                            Text("Poin Tersedia", fontSize = 14.sp, color = White.copy(alpha = 0.85f))
                         }
                     }
                 }
@@ -165,13 +161,13 @@ fun RewardScreen(
                             "  Produk Rumah Tangga",
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
-                            color = DarkText
+                            color = Black
                         )
                     }
                 }
 
                 items(ECO_REWARDS.filter { it.category == "Rumah Tangga" }) { reward ->
-                    EcoRewardCard(reward = reward, memberPoints = m.points, onRedeem = { selectedReward = reward })
+                    EcoRewardCard(reward = reward, penggunaPoints = p.points, onRedeem = { selectedReward = reward })
                 }
 
                 // E-Money section
@@ -179,7 +175,7 @@ fun RewardScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text("💳", fontSize = 16.sp)
-                        Text("  E-Money / Saldo Digital", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = DarkText)
+                        Text("  E-Money / Saldo Digital", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Black)
                     }
                 }
 
@@ -202,19 +198,19 @@ fun RewardScreen(
                 }
 
                 items(ECO_REWARDS.filter { it.category == "E-Money" }) { reward ->
-                    EcoRewardCard(reward = reward, memberPoints = m.points, onRedeem = { selectedReward = reward })
+                    EcoRewardCard(reward = reward, penggunaPoints = p.points, onRedeem = { selectedReward = reward })
                 }
 
                 item {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        color = RoseGoldLight.copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f)
                     ) {
                         Text(
                             "🎁 Reward tersedia sesuai stok. Hubungi petugas untuk konfirmasi pengambilan.",
                             fontSize = 12.sp,
-                            color = RoseGoldDark,
+                            color = Black.copy(alpha = 0.7f),
                             modifier = Modifier.padding(14.dp),
                             textAlign = TextAlign.Center
                         )
@@ -224,19 +220,19 @@ fun RewardScreen(
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = RoseGold)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
 }
 
 @Composable
-fun EcoRewardCard(reward: EcoReward, memberPoints: Int, onRedeem: () -> Unit) {
-    val canRedeem = memberPoints >= reward.pointCost
+fun EcoRewardCard(reward: EcoReward, penggunaPoints: Int, onRedeem: () -> Unit) {
+    val canRedeem = penggunaPoints >= reward.pointCost
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        color = SurfaceWhite,
+        color = White,
         shadowElevation = 2.dp
     ) {
         Row(
@@ -246,24 +242,24 @@ fun EcoRewardCard(reward: EcoReward, memberPoints: Int, onRedeem: () -> Unit) {
             Surface(
                 modifier = Modifier.padding(end = 12.dp),
                 shape = RoundedCornerShape(12.dp),
-                color = if (canRedeem) RoseGoldLight else Color(0xFFF0F0F0)
+                color = if (canRedeem) MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f) else Black.copy(alpha = 0.05f)
             ) {
                 Text(reward.emoji, fontSize = 30.sp, modifier = Modifier.padding(10.dp))
             }
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(reward.name, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = DarkText)
-                Text(reward.description, fontSize = 11.sp, color = MediumText)
+                Text(reward.name, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Black)
+                Text(reward.description, fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                 Spacer(modifier = Modifier.height(4.dp))
                 Surface(
-                    color = if (canRedeem) SuccessGreenBg else Color(0xFFF0F0F0),
+                    color = if (canRedeem) SuccessGreenBg else Black.copy(alpha = 0.05f),
                     shape = RoundedCornerShape(50)
                 ) {
                     Text(
                         "${reward.pointCost} poin",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = if (canRedeem) SuccessGreen else MediumText,
+                        color = if (canRedeem) SuccessGreen else Black.copy(alpha = 0.4f),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                     )
                 }
@@ -274,15 +270,15 @@ fun EcoRewardCard(reward: EcoReward, memberPoints: Int, onRedeem: () -> Unit) {
                 enabled = canRedeem,
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = RoseGoldDark,
-                    disabledContainerColor = Color(0xFFE0E0E0)
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = Black.copy(alpha = 0.1f)
                 ),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
             ) {
                 Text(
                     text = if (canRedeem) "Tukar" else "Kurang",
                     fontSize = 12.sp,
-                    color = if (canRedeem) Color.White else MediumText,
+                    color = if (canRedeem) White else Black.copy(alpha = 0.4f),
                     fontWeight = FontWeight.Bold
                 )
             }

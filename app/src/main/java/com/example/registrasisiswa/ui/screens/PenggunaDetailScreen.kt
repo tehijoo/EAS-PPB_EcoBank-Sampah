@@ -28,6 +28,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,48 +42,42 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.registrasisiswa.data.entity.formattedId
 import com.example.registrasisiswa.data.entity.level
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.SuccessGreen
-import com.example.registrasisiswa.ui.theme.SuccessGreenBg
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.Black
+import com.example.registrasisiswa.ui.theme.KatalogBg
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 import com.example.registrasisiswa.viewmodel.UserRole
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MemberDetailScreen(
+fun PenggunaDetailScreen(
     viewModel: EcoBankViewModel,
     onNavigateBack: () -> Unit,
-    onNavigateToMemberCard: () -> Unit,
+    onNavigateToPenggunaCard: () -> Unit,
     onNavigateToAddTransaction: () -> Unit,
     onNavigateToTransactionHistory: () -> Unit,
     onNavigateToReward: () -> Unit,
     onNavigateToWasteCatalog: () -> Unit
 ) {
-    val member by viewModel.currentMember.collectAsState()
+    val pengguna by viewModel.currentPengguna.collectAsState()
     val userRole by viewModel.userRole.collectAsState()
-    val isNasabah = userRole == UserRole.NASABAH
+    val isPengguna = userRole == UserRole.PENGGUNA
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Hapus Nasabah") },
-            text = { Text("Hapus nasabah ${member?.name}? Semua data riwayat setor akan hilang.") },
+            title = { Text("Hapus Pengguna") },
+            text = { Text("Hapus pengguna ${pengguna?.name}? Semua data riwayat setor akan hilang.") },
             confirmButton = {
                 TextButton(onClick = {
-                    member?.let { viewModel.deleteMember(it) }
+                    pengguna?.let { viewModel.deletePengguna(it) }
                     showDeleteDialog = false
                     onNavigateBack()
                 }) {
@@ -98,32 +93,32 @@ fun MemberDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detail Nasabah", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Detail Pengguna", color = White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = White)
                     }
                 },
                 actions = {
-                    if (isNasabah) {
+                    if (isPengguna) {
                         IconButton(onClick = {
                             viewModel.logout()
                             onNavigateBack()
                         }) {
-                            Icon(Icons.Default.ExitToApp, contentDescription = "Keluar", tint = Color.White)
+                            Icon(Icons.Default.ExitToApp, contentDescription = "Keluar", tint = White)
                         }
                     } else {
                         IconButton(onClick = { showDeleteDialog = true }) {
-                            Icon(Icons.Default.Delete, contentDescription = "Hapus", tint = Color.White)
+                            Icon(Icons.Default.Delete, contentDescription = "Hapus", tint = White)
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
-        member?.let { m ->
+        pengguna?.let { p ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(paddingValues),
                 contentPadding = PaddingValues(16.dp),
@@ -134,7 +129,7 @@ fun MemberDetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                Brush.verticalGradient(colors = listOf(RoseGold, RoseGoldDark)),
+                                MaterialTheme.colorScheme.primary,
                                 RoundedCornerShape(20.dp)
                             )
                             .padding(24.dp)
@@ -143,46 +138,46 @@ fun MemberDetailScreen(
                             Box(
                                 modifier = Modifier
                                     .size(72.dp)
-                                    .background(Color.White.copy(alpha = 0.25f), CircleShape),
+                                    .background(White.copy(alpha = 0.25f), CircleShape),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = m.name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                                    text = p.name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
                                     fontSize = 32.sp,
                                     fontWeight = FontWeight.ExtraBold,
-                                    color = Color.White
+                                    color = White
                                 )
                             }
                             Spacer(modifier = Modifier.height(12.dp))
-                            Text(m.name, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = Color.White)
-                            Text(m.formattedId(), fontSize = 13.sp, color = Color.White.copy(alpha = 0.8f))
+                            Text(p.name, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = White)
+                            Text(p.formattedId(), fontSize = 13.sp, color = White.copy(alpha = 0.8f))
                             Spacer(modifier = Modifier.height(12.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Text("${m.points}", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = Color.White)
-                                    Text("Total Poin", fontSize = 11.sp, color = Color.White.copy(alpha = 0.75f))
+                                    Text("${p.points}", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = White)
+                                    Text("Total Poin", fontSize = 11.sp, color = White.copy(alpha = 0.75f))
                                 }
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(
-                                        text = when (m.level()) { "Champion" -> "🏆"; "Aktif" -> "⭐"; else -> "🌱" },
+                                        text = when (p.level()) { "Champion" -> "🏆"; "Aktif" -> "⭐"; else -> "🌱" },
                                         fontSize = 28.sp
                                     )
-                                    Text(m.level(), fontSize = 11.sp, color = Color.White.copy(alpha = 0.75f))
+                                    Text(p.level(), fontSize = 11.sp, color = White.copy(alpha = 0.75f))
                                 }
                             }
                         }
                     }
                 }
 
-                item { Text("Menu Nasabah", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = DarkText) }
+                item { Text("Menu Pengguna", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Black) }
 
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            ActionMenuCard("💳", "Kartu Nasabah", "Tampilkan kartu digital", Modifier.weight(1f)) {
-                                onNavigateToMemberCard()
+                            ActionMenuCard("💳", "Kartu Pengguna", "Tampilkan kartu digital", Modifier.weight(1f)) {
+                                onNavigateToPenggunaCard()
                             }
-                            ActionMenuCard("♻️", "Setor Sampah", "Catat setoran sampah", Modifier.weight(1f)) {
+                            ActionMenuCard("🌱", "Setor Sampah", "Catat setoran sampah", Modifier.weight(1f)) {
                                 onNavigateToAddTransaction()
                             }
                         }
@@ -190,7 +185,7 @@ fun MemberDetailScreen(
                             ActionMenuCard("📋", "Riwayat Setor", "Lihat semua riwayat", Modifier.weight(1f)) {
                                 onNavigateToTransactionHistory()
                             }
-                            ActionMenuCard("🎁", "Tukar Reward", "${m.points} poin tersedia", Modifier.weight(1f)) {
+                            ActionMenuCard("🎁", "Tukar Reward", "${p.points} poin tersedia", Modifier.weight(1f)) {
                                 onNavigateToReward()
                             }
                         }
@@ -200,7 +195,7 @@ fun MemberDetailScreen(
                                 .fillMaxWidth()
                                 .clickable(onClick = onNavigateToWasteCatalog),
                             shape = RoundedCornerShape(14.dp),
-                            colors = CardDefaults.cardColors(containerColor = SuccessGreenBg),
+                            colors = CardDefaults.cardColors(containerColor = KatalogBg),
                             elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                         ) {
                             Row(
@@ -216,16 +211,16 @@ fun MemberDetailScreen(
                                             "Katalog Sampah",
                                             fontWeight = FontWeight.Bold,
                                             fontSize = 14.sp,
-                                            color = SuccessGreen
+                                            color = Black
                                         )
                                         Text(
                                             "Lihat jenis sampah & nilai poinnya",
                                             fontSize = 11.sp,
-                                            color = SuccessGreen.copy(alpha = 0.75f)
+                                            color = Black.copy(alpha = 0.7f)
                                         )
                                     }
                                 }
-                                Text("›", fontSize = 22.sp, color = SuccessGreen, fontWeight = FontWeight.Bold)
+                                Text("›", fontSize = 22.sp, color = Black, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -235,20 +230,21 @@ fun MemberDetailScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        colors = CardDefaults.cardColors(containerColor = SurfaceWhite)
+                        colors = CardDefaults.cardColors(containerColor = White),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text("Info Nasabah", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = DarkText)
+                            Text("Info Pengguna", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Black)
                             Spacer(modifier = Modifier.height(8.dp))
-                            InfoRow(label = "Email", value = m.email)
-                            InfoRow(label = "Nomor HP", value = m.phone)
-                            InfoRow(label = "Bergabung", value = m.joinDate)
+                            InfoRow(label = "Email", value = p.email)
+                            InfoRow(label = "Nomor HP", value = p.phone)
+                            InfoRow(label = "Bergabung", value = p.joinDate)
                         }
                     }
                 }
             }
         } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = RoseGold)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -258,7 +254,7 @@ fun ActionMenuCard(emoji: String, title: String, subtitle: String, modifier: Mod
     Card(
         modifier = modifier.height(110.dp).clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -267,8 +263,8 @@ fun ActionMenuCard(emoji: String, title: String, subtitle: String, modifier: Mod
         ) {
             Text(text = emoji, fontSize = 28.sp)
             Column {
-                Text(text = title, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = DarkText)
-                Text(text = subtitle, fontSize = 10.sp, color = MediumText)
+                Text(text = title, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Black)
+                Text(text = subtitle, fontSize = 10.sp, color = Black.copy(alpha = 0.6f))
             }
         }
     }
@@ -277,7 +273,7 @@ fun ActionMenuCard(emoji: String, title: String, subtitle: String, modifier: Mod
 @Composable
 fun InfoRow(label: String, value: String) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = label, fontSize = 13.sp, color = MediumText)
-        Text(text = value, fontSize = 13.sp, color = DarkText, fontWeight = FontWeight.Medium)
+        Text(text = label, fontSize = 13.sp, color = Black.copy(alpha = 0.6f))
+        Text(text = value, fontSize = 13.sp, color = Black, fontWeight = FontWeight.Medium)
     }
 }

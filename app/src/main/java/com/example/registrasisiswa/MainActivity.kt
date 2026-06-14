@@ -15,11 +15,11 @@ import com.example.registrasisiswa.ui.theme.EcoBankTheme
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 import com.example.registrasisiswa.viewmodel.EcoBankViewModelFactory
 
-class MainActivity : ComponentActivity() {
+class  MainActivity : ComponentActivity() {
 
     private val viewModel: EcoBankViewModel by viewModels {
         val db = AppDatabase.getDatabase(applicationContext)
-        EcoBankViewModelFactory(EcoBankRepository(db.memberDao(), db.transactionDao()))
+        EcoBankViewModelFactory(EcoBankRepository(db.penggunaDao(), db.transactionDao()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

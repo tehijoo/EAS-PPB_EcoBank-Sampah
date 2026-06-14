@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val memberId: Int,
+    val penggunaId: Int,
     val amount: Double,        // berat dalam gram untuk SETOR, 0 untuk REDEEM
     val pointEarned: Int,
     val date: String,
