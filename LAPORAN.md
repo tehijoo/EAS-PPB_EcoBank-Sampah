@@ -8,7 +8,7 @@
 | **Nama Aplikasi** | EcoBank — Aplikasi Bank Sampah Digital |
 | **Platform** | Android |
 | **Versi** | 1.0 |
-| **Nama Mahasiswa** | Alya Rahmatillah Machmud |
+| **Nama Anggota Tim** | 1. Alya Rahmatillah Machmud <br> 2. Nadya Zhafira |
 | **Mata Kuliah** | Pemrograman Perangkat Bergerak (PPB) C |
 
 ---
