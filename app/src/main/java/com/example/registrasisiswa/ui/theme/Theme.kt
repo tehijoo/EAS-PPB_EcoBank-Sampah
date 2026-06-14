@@ -1,50 +1,51 @@
-// ui/theme/Theme.kt
-
 package com.example.registrasisiswa.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
+import android.app.Activity
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Brown80,
-    secondary = BrownGrey80,
-    tertiary = Cream80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Brown40,          // Cokelat Tua untuk area atas & tombol
-    onPrimary = Color.White,    // Teks putih untuk area atas & tombol
-    secondary = BrownGrey40,
-    tertiary = Cream80,
-    background = Cream40,       // Cream untuk latar belakang layar
-    surface = Cream40,
-    onBackground = Brown40,     // Teks cokelat di atas background cream
-    onSurface = Brown40
+private val EcoBankColorScheme = lightColorScheme(
+    primary = RoseGold,
+    onPrimary = OnRoseGold,
+    primaryContainer = RoseGoldLight,
+    onPrimaryContainer = OnRoseGoldLight,
+    secondary = WarmMauve,
+    onSecondary = OnWarmMauve,
+    secondaryContainer = WarmMauveLight,
+    onSecondaryContainer = Color(0xFF340B27),
+    tertiary = GoldenBrown,
+    onTertiary = Color.White,
+    tertiaryContainer = GoldenBrownLight,
+    onTertiaryContainer = Color(0xFF2C1700),
+    background = BackgroundCream,
+    onBackground = DarkText,
+    surface = SurfaceWhite,
+    onSurface = DarkText,
+    surfaceVariant = SurfaceVariantRose,
+    onSurfaceVariant = MediumText,
+    error = ErrorRed,
+    onError = Color.White,
+    errorContainer = ErrorRedBg,
+    onErrorContainer = Color(0xFF410002),
 )
 
 @Composable
-fun RegistrasiSiswaTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Paksa false agar dynamic color tidak mengacaukan tema cokelat
-    dynamicColor: Boolean = false,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+fun EcoBankTheme(content: @Composable () -> Unit) {
+    val colorScheme = EcoBankColorScheme
+    val view = LocalView.current
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+        }
     }
 
     MaterialTheme(
