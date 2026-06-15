@@ -9,7 +9,7 @@ import com.example.registrasisiswa.data.dao.TransactionDao
 import com.example.registrasisiswa.data.entity.Pengguna
 import com.example.registrasisiswa.data.entity.Transaction
 
-@Database(entities = [Pengguna::class, Transaction::class], version = 2, exportSchema = false)
+@Database(entities = [Pengguna::class, Transaction::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun penggunaDao(): PenggunaDao
     abstract fun transactionDao(): TransactionDao
