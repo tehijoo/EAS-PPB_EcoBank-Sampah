@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Final Project EcoBank</title>
+<style>
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    line-height: 1.8;
+    margin: 2.54cm 2.54cm 2.54cm 2.54cm;
+    color: #000000;
+  }
+  h1 {
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 6pt;
+    color: #000000;
+  }
+  h2 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 18pt;
+    margin-bottom: 6pt;
+    color: #000000;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 4pt;
+  }
+  h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 12pt;
+    margin-bottom: 4pt;
+    color: #000000;
+  }
+  h4 {
+    font-size: 12pt;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 10pt;
+    margin-bottom: 4pt;
+  }
+  p {
+    margin-top: 6pt;
+    margin-bottom: 6pt;
+    text-align: justify;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8pt;
+    margin-bottom: 8pt;
+    font-size: 11pt;
+  }
+  th {
+    background-color: #BF7182;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 6pt 8pt;
+    border: 1px solid #999999;
+    text-align: left;
+  }
+  td {
+    padding: 5pt 8pt;
+    border: 1px solid #cccccc;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td {
+    background-color: #fdf5f6;
+  }
+  .cover-table td {
+    border: 1px solid #cccccc;
+    padding: 6pt 12pt;
+  }
+  .cover-table td:first-child {
+    font-weight: bold;
+    width: 35%;
+    background-color: #f5f5f5;
+  }
+  ul, ol {
+    margin-top: 4pt;
+    margin-bottom: 4pt;
+    padding-left: 20pt;
+  }
+  li {
+    margin-bottom: 3pt;
+  }
+  code, pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10pt;
+    background-color: #f4f4f4;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+  }
+  code {
+    padding: 1pt 4pt;
+  }
+  pre {
+    padding: 8pt 12pt;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    margin: 8pt 0;
+  }
+  .center {
+    text-align: center;
+  }
+  .bold { font-weight: bold; }
+  .divider {
+    border: none;
+    border-top: 1px solid #cccccc;
+    margin: 14pt 0;
+  }
+  .section-number {
+    color: #BF7182;
+  }
+  .status-done {
+    color: #2e7d32;
+    font-weight: bold;
+  }
+  .checklist-yes { color: #2e7d32; font-weight: bold; }
+  .indent { margin-left: 20pt; }
+  .subtitle {
+    font-size: 13pt;
+    text-align: center;
+    margin-bottom: 20pt;
+  }
+  .page-break { page-break-after: always; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div style="text-align:center; margin-top: 60pt; margin-bottom: 40pt;">
+  <h1>LAPORAN FINAL PROJECT</h1>
+  <p class="subtitle">Pemrograman Perangkat Bergerak (PPB)</p>
+  <br>
+  <p style="font-size:24pt; font-weight:bold; color:#BF7182; margin: 20pt 0;">&#9827; EcoBank</p>
+  <p style="font-size:14pt; margin: 0;">Aplikasi Bank Sampah Digital</p>
+</div>
+
+<br><br>
+
+<table class="cover-table" style="max-width:420pt; margin: auto;">
+  <tr><td>Nama Aplikasi</td><td>EcoBank &mdash; Aplikasi Bank Sampah Digital</td></tr>
+  <tr><td>Platform</td><td>Android</td></tr>
+  <tr><td>Versi</td><td>1.0</td></tr>
+  <tr><td>Nama Mahasiswa</td><td>Alya Rahmatillah Machmud</td></tr>
+  <tr><td>Mata Kuliah</td><td>Pemrograman Perangkat Bergerak (PPB)</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- DAFTAR ISI -->
+<h2>Daftar Isi</h2>
+<ol>
+  <li>Pendahuluan</li>
+  <li>Ruang Lingkup (Scope)</li>
+  <li>Teknologi yang Digunakan</li>
+  <li>Arsitektur Aplikasi (MVVM)</li>
+  <li>Desain Database</li>
+  <li>Struktur File Project</li>
+  <li>Pemenuhan Functional Requirements (FR-01 s/d FR-06)</li>
+  <li>Pemenuhan Non-Functional Requirements</li>
+  <li>Alur Navigasi Aplikasi</li>
+  <li>Deskripsi Setiap Screen</li>
+  <li>Fitur Tambahan (Beyond PRD)</li>
+  <li>Definition of Done (DoD) Checklist</li>
+  <li>Deliverables</li>
+  <li>Kesimpulan</li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- BAB 1 -->
+<h2>1. Pendahuluan</h2>
+
+<h3>1.1 Latar Belakang</h3>
+<p>
+  Program bank sampah merupakan salah satu upaya pengelolaan sampah berbasis masyarakat yang semakin berkembang di Indonesia.
+  Dalam pelaksanaannya, bank sampah masih banyak mengandalkan pencatatan manual dan kartu member fisik sebagai bukti keanggotaan.
+  Pendekatan ini memiliki beberapa kelemahan:
+</p>
+<ul>
+  <li>Kartu fisik mudah hilang atau rusak</li>
+  <li>Pencatatan poin dan transaksi dilakukan secara manual sehingga rawan kesalahan</li>
+  <li>User tidak dapat memantau saldo poin secara real-time</li>
+  <li>Membutuhkan biaya cetak dan operasional administrasi yang tidak efisien</li>
+</ul>
+<p>
+  Berdasarkan latar belakang tersebut, dikembangkan aplikasi <strong>EcoBank</strong> &mdash; sebuah platform digital untuk bank sampah
+  yang memungkinkan pengelolaan user, pencatatan setoran sampah, sistem poin otomatis, dan penukaran reward,
+  seluruhnya dalam genggaman pengguna melalui smartphone Android.
+</p>
+
+<h3>1.2 Tujuan</h3>
+<p>Membangun aplikasi Android yang memungkinkan:</p>
+<ol>
+  <li>Registrasi dan pengelolaan data user bank sampah</li>
+  <li>Penyimpanan data user dan transaksi secara lokal menggunakan Room Database</li>
+  <li>Kartu membership digital untuk setiap user</li>
+  <li>Sistem poin otomatis berdasarkan jenis dan berat sampah yang disetorkan</li>
+  <li>Riwayat transaksi setor sampah dan penukaran reward</li>
+  <li>Penukaran poin dengan berbagai reward (kebutuhan rumah tangga dan e-money)</li>
+  <li>Akses berbasis peran: Pengelola (admin) dan User (member)</li>
+</ol>
+
+<hr class="divider">
+
+<!-- BAB 2 -->
+<h2>2. Ruang Lingkup (Scope)</h2>
+
+<h3>In Scope (Fitur yang Diimplementasikan)</h3>
+<ul>
+  <li>Registrasi User (Member)</li>
+  <li>Dashboard Pengelola</li>
+  <li>Kartu Membership Digital</li>
+  <li>Sistem Poin Otomatis</li>
+  <li>Riwayat Transaksi</li>
+  <li>Penukaran Reward</li>
+  <li>Room Database (penyimpanan lokal)</li>
+  <li>Role-Based Access (Pengelola vs User)</li>
+  <li>Katalog Sampah (8 jenis sampah + nilai poin)</li>
+</ul>
+
+<h3>Out of Scope (Tidak Diimplementasikan)</h3>
+<ul>
+  <li>Online Payment</li>
+  <li>Cloud Database / Firebase</li>
+  <li>Login Google</li>
+  <li>Push Notification</li>
+  <li>Multi Device Sync</li>
+</ul>
+
+<hr class="divider">
+
+<!-- BAB 3 -->
+<h2>3. Teknologi yang Digunakan</h2>
+
+<table>
+  <tr><th>Teknologi</th><th>Versi</th><th>Kegunaan</th></tr>
+  <tr><td>Kotlin</td><td>1.9.x</td><td>Bahasa pemrograman utama</td></tr>
+  <tr><td>Jetpack Compose</td><td>BOM 2024.x</td><td>Framework UI deklaratif</td></tr>
+  <tr><td>Material Design 3</td><td>-</td><td>Komponen UI dan desain sistem</td></tr>
+  <tr><td>Room Database</td><td>2.6.1</td><td>Penyimpanan data lokal (SQLite wrapper)</td></tr>
+  <tr><td>Navigation Compose</td><td>2.7.7</td><td>Navigasi antar halaman</td></tr>
+  <tr><td>ViewModel</td><td>2.8.0</td><td>Manajemen state UI</td></tr>
+  <tr><td>Kotlin Coroutines</td><td>1.7.3</td><td>Pemrograman asinkron</td></tr>
+  <tr><td>StateFlow / Flow</td><td>-</td><td>Reaktivitas data antara ViewModel dan UI</td></tr>
+  <tr><td>KAPT</td><td>-</td><td>Annotation processing untuk Room</td></tr>
+  <tr><td>Gradle Kotlin DSL</td><td>-</td><td>Build system</td></tr>
+  <tr><td>Material Icons Extended</td><td>-</td><td>Ikon material design</td></tr>
+</table>
+
+<p><strong>Spesifikasi Build:</strong></p>
+<ul>
+  <li><code>minSdk</code>: 24 (Android 7.0 Nougat)</li>
+  <li><code>targetSdk</code>: 36</li>
+  <li><code>compileSdk</code>: 36</li>
+  <li>Kotlin Compiler Extension: 1.5.14</li>
+</ul>
+
+<hr class="divider">
+
+<!-- BAB 4 -->
+<h2>4. Arsitektur Aplikasi (MVVM)</h2>
+
+<p>
+  Aplikasi mengikuti pola arsitektur <strong>MVVM (Model-View-ViewModel)</strong> dengan <strong>Repository Pattern</strong>,
+  sesuai best practice Android modern.
+</p>
+
+<table>
+  <tr><th>Layer</th><th>Komponen</th><th>Tanggung Jawab</th></tr>
+  <tr>
+    <td><strong>Presentation Layer</strong></td>
+    <td>Compose UI Screens (12 screens)</td>
+    <td>Menampilkan state dari ViewModel; mengirim event (klik, input) ke ViewModel</td>
+  </tr>
+  <tr>
+    <td><strong>ViewModel Layer</strong></td>
+    <td>EcoBankViewModel.kt</td>
+    <td>Menyimpan UI state (StateFlow); mengatur business logic tingkat UI; memanggil Repository</td>
+  </tr>
+  <tr>
+    <td><strong>Repository Layer</strong></td>
+    <td>EcoBankRepository.kt</td>
+    <td>Single source of truth; mengabstraksi akses ke DAO; business logic hitung poin & redeem</td>
+  </tr>
+  <tr>
+    <td><strong>Database Layer</strong></td>
+    <td>Room Database (AppDatabase.kt)</td>
+    <td>Persistensi data menggunakan SQLite; 2 tabel: members dan transactions</td>
+  </tr>
+</table>
+
+<h3>Aliran Data (Data Flow)</h3>
+<p><strong>Membaca data (reactive):</strong></p>
+<pre>Room DB &#8594; DAO (Flow) &#8594; Repository &#8594; ViewModel (StateFlow) &#8594; Compose UI</pre>
+
+<p><strong>Menulis data (suspend):</strong></p>
+<pre>Compose UI &#8594; ViewModel &#8594; Repository &#8594; DAO &#8594; Room DB
+(update otomatis melalui Flow yang sama)</pre>
+
+<h3>Penggunaan flatMapLatest</h3>
+<p>
+  Di ViewModel, <code>currentMember</code> dan <code>currentTransactions</code> menggunakan
+  <code>flatMapLatest</code> pada <code>_currentMemberId</code>, sehingga ketika user yang dipilih berubah,
+  data yang ditampilkan ikut berubah secara reaktif tanpa perlu memanggil ulang secara manual.
+</p>
+<pre>val currentMember = _currentMemberId.flatMapLatest { id ->
+    if (id == -1) flowOf(null)
+    else repository.getMemberById(id)
+}</pre>
+
+<hr class="divider">
+
+<!-- BAB 5 -->
+<h2>5. Desain Database</h2>
+
+<h3>Relasi Tabel</h3>
+<p>Aplikasi menggunakan 2 tabel dengan relasi one-to-many: satu user dapat memiliki banyak transaksi.</p>
+
+<table>
+  <tr>
+    <th colspan="2">Tabel: members</th>
+    <th colspan="2">Tabel: transactions</th>
+  </tr>
+  <tr>
+    <td><strong>Field</strong></td>
+    <td><strong>Type</strong></td>
+    <td><strong>Field</strong></td>
+    <td><strong>Type</strong></td>
+  </tr>
+  <tr><td>id (PK)</td><td>INTEGER</td><td>id (PK)</td><td>INTEGER</td></tr>
+  <tr><td>name</td><td>TEXT</td><td>memberId (FK)</td><td>INTEGER</td></tr>
+  <tr><td>email</td><td>TEXT</td><td>amount</td><td>REAL</td></tr>
+  <tr><td>phone</td><td>TEXT</td><td>pointEarned</td><td>INTEGER</td></tr>
+  <tr><td>points</td><td>INTEGER</td><td>date</td><td>TEXT</td></tr>
+  <tr><td>joinDate</td><td>TEXT</td><td>type (SETOR/REDEEM)</td><td>TEXT</td></tr>
+  <tr><td></td><td></td><td>description</td><td>TEXT</td></tr>
+</table>
+
+<h3>Detail Tabel Members</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Constraint</th><th>Keterangan</th></tr>
+  <tr><td>id</td><td>INTEGER</td><td>PK, AUTO</td><td>ID unik user</td></tr>
+  <tr><td>name</td><td>TEXT</td><td>NOT NULL</td><td>Nama lengkap</td></tr>
+  <tr><td>email</td><td>TEXT</td><td>NOT NULL</td><td>Alamat email</td></tr>
+  <tr><td>phone</td><td>TEXT</td><td>NOT NULL</td><td>Nomor HP</td></tr>
+  <tr><td>points</td><td>INTEGER</td><td>DEFAULT 0</td><td>Total poin saat ini</td></tr>
+  <tr><td>joinDate</td><td>TEXT</td><td>NOT NULL</td><td>Tanggal daftar (dd/MM/yyyy)</td></tr>
+</table>
+
+<h3>Detail Tabel Transactions</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Constraint</th><th>Keterangan</th></tr>
+  <tr><td>id</td><td>INTEGER</td><td>PK, AUTO</td><td>ID unik transaksi</td></tr>
+  <tr><td>memberId</td><td>INTEGER</td><td>FK</td><td>Relasi ke user</td></tr>
+  <tr><td>amount</td><td>REAL</td><td>NOT NULL</td><td>Berat (gram) SETOR; 0 untuk REDEEM</td></tr>
+  <tr><td>pointEarned</td><td>INTEGER</td><td>NOT NULL</td><td>Poin didapat / dipakai</td></tr>
+  <tr><td>date</td><td>TEXT</td><td>NOT NULL</td><td>Waktu transaksi (dd/MM/yyyy HH:mm)</td></tr>
+  <tr><td>type</td><td>TEXT</td><td>NOT NULL</td><td>"SETOR" atau "REDEEM"</td></tr>
+  <tr><td>description</td><td>TEXT</td><td>NOT NULL</td><td>Jenis sampah / nama reward</td></tr>
+</table>
+
+<h3>Formula Poin</h3>
+<pre>pointEarned = (beratGram x pointsPerKg) / 1000
+
+Contoh: Botol Plastik 500 gram
+pointEarned = (500 x 50) / 1000 = 25 poin</pre>
+
+<h3>Nilai Poin per Jenis Sampah</h3>
+<table>
+  <tr><th>Jenis Sampah</th><th>Poin/kg</th></tr>
+  <tr><td>Botol Plastik</td><td>50</td></tr>
+  <tr><td>Plastik Lembaran</td><td>30</td></tr>
+  <tr><td>Kardus / Karton</td><td>30</td></tr>
+  <tr><td>Kertas</td><td>20</td></tr>
+  <tr><td>Kaleng Aluminium</td><td>100</td></tr>
+  <tr><td>Besi / Logam</td><td>40</td></tr>
+  <tr><td>Kaca / Gelas</td><td>30</td></tr>
+  <tr><td>Elektronik (e-waste)</td><td>150</td></tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 6 -->
+<h2>6. Struktur File Project</h2>
+
+<table>
+  <tr><th>File / Folder</th><th>Fungsi</th></tr>
+  <tr><td colspan="2" style="background:#f0e4e6; font-weight:bold;">Data Layer</td></tr>
+  <tr><td><code>data/AppDatabase.kt</code></td><td>Room Database singleton (version 2), nama DB: "ecobank_database"</td></tr>
+  <tr><td><code>data/entity/Member.kt</code></td><td>Entity tabel members + extension formattedId() & level()</td></tr>
+  <tr><td><code>data/entity/Transaction.kt</code></td><td>Entity tabel transactions (SETOR / REDEEM)</td></tr>
+  <tr><td><code>data/dao/MemberDao.kt</code></td><td>CRUD user: getAllMembers (Flow), getMemberById (Flow), insertMember (returns Long)</td></tr>
+  <tr><td><code>data/dao/TransactionDao.kt</code></td><td>Insert transaksi, getTransactionsByMemberId (Flow)</td></tr>
+  <tr><td><code>data/repository/EcoBankRepository.kt</code></td><td>Business logic: addWasteTransaction(), redeemReward(), insertMemberAndGetId()</td></tr>
+  <tr><td colspan="2" style="background:#f0e4e6; font-weight:bold;">ViewModel Layer</td></tr>
+  <tr><td><code>viewmodel/EcoBankViewModel.kt</code></td><td>StateFlow (allMembers, currentMember, userRole, dll), auth, CRUD, EcoBankViewModelFactory</td></tr>
+  <tr><td colspan="2" style="background:#f0e4e6; font-weight:bold;">UI Layer &mdash; Model</td></tr>
+  <tr><td><code>ui/model/EcoBankData.kt</code></td><td>Data statis: 8 WasteType & 7 EcoReward</td></tr>
+  <tr><td colspan="2" style="background:#f0e4e6; font-weight:bold;">UI Layer &mdash; Navigation</td></tr>
+  <tr><td><code>ui/navigation/NavGraph.kt</code></td><td>12 routes, sealed class Screen, NavHost, manajemen backstack</td></tr>
+  <tr><td colspan="2" style="background:#f0e4e6; font-weight:bold;">UI Layer &mdash; Screens (12 screen)</td></tr>
+  <tr><td><code>SplashScreen.kt</code></td><td>Logo EcoBank dengan animasi spring + tween, auto-navigate setelah 2 detik</td></tr>
+  <tr><td><code>RoleSelectionScreen.kt</code></td><td>Pilih role: Pengelola atau User</td></tr>
+  <tr><td><code>AdminLoginScreen.kt</code></td><td>Form login username + password dengan show/hide toggle</td></tr>
+  <tr><td><code>NasabahLoginScreen.kt</code></td><td>Tab Masuk (cari akun) + Tab Daftar Baru (form registrasi)</td></tr>
+  <tr><td><code>HomeScreen.kt</code></td><td>Dashboard admin: total user + list semua user (LazyColumn)</td></tr>
+  <tr><td><code>AddMemberScreen.kt</code></td><td>Form tambah user baru oleh admin</td></tr>
+  <tr><td><code>MemberDetailScreen.kt</code></td><td>Profil user + grid 2x2 menu aksi + katalog sampah</td></tr>
+  <tr><td><code>MemberCardScreen.kt</code></td><td>Kartu member digital bergaya kartu perbankan</td></tr>
+  <tr><td><code>AddTransactionScreen.kt</code></td><td>Pilih jenis sampah + input berat, kalkulasi poin otomatis</td></tr>
+  <tr><td><code>TransactionHistoryScreen.kt</code></td><td>Riwayat SETOR & REDEEM dengan summary header</td></tr>
+  <tr><td><code>RewardScreen.kt</code></td><td>Daftar reward + konfirmasi AlertDialog + Snackbar feedback</td></tr>
+  <tr><td><code>WasteCatalogScreen.kt</code></td><td>Katalog 8 jenis sampah & nilai poin (akses admin dan user)</td></tr>
+  <tr><td colspan="2" style="background:#f0e4e6; font-weight:bold;">UI Layer &mdash; Theme</td></tr>
+  <tr><td><code>ui/theme/Color.kt</code></td><td>Palet warna rose gold (#BF7182) + utility colors</td></tr>
+  <tr><td><code>ui/theme/Theme.kt</code></td><td>EcoBankTheme menggunakan Material 3, light mode</td></tr>
+  <tr><td colspan="2" style="background:#f0e4e6; font-weight:bold;">Resources</td></tr>
+  <tr><td><code>res/drawable/ic_launcher_*.xml</code></td><td>Adaptive icon: background rose gold + foreground simbol daur ulang + daun</td></tr>
+  <tr><td><code>res/values/strings.xml</code></td><td>app_name = "EcoBank"</td></tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 7 -->
+<h2>7. Pemenuhan Functional Requirements</h2>
+
+<h3>FR-01 &mdash; Registrasi Member</h3>
+<p><strong>Deskripsi PRD:</strong> Pengguna dapat membuat akun member baru dengan input: Nama, Email, Nomor HP.</p>
+
+<table>
+  <tr><th>Komponen</th><th>File</th><th>Detail</th></tr>
+  <tr><td>Form UI (Admin)</td><td><code>AddMemberScreen.kt</code></td><td>OutlinedTextField untuk nama, email, HP; validasi semua field wajib + format email</td></tr>
+  <tr><td>Form UI (User)</td><td><code>NasabahLoginScreen.kt</code></td><td>Tab "Daftar Baru" dengan form yang sama; auto-login setelah daftar</td></tr>
+  <tr><td>Business Logic</td><td><code>EcoBankViewModel.kt</code></td><td><code>addMember()</code> dan <code>registerAndLoginAsUser()</code></td></tr>
+  <tr><td>Penyimpanan</td><td><code>MemberDao.kt</code></td><td><code>insertMember(member): Long</code></td></tr>
+  <tr><td>Repository</td><td><code>EcoBankRepository.kt</code></td><td><code>insertMemberAndGetId()</code> mengembalikan ID user baru</td></tr>
+</table>
+
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>&#10003; Semua field wajib diisi &mdash; divalidasi sebelum submit</li>
+  <li>&#10003; Email harus valid &mdash; dicek dengan <code>.contains("@")</code></li>
+  <li>&#10003; Data member tersimpan &mdash; via Room + DAO</li>
+  <li>&#10003; User langsung login setelah daftar &mdash; via <code>registerAndLoginAsUser()</code></li>
+</ul>
+
+<h3>FR-02 &mdash; Daftar Member</h3>
+<p><strong>Deskripsi PRD:</strong> Menampilkan seluruh member dari Room Database, data otomatis update.</p>
+
+<table>
+  <tr><th>Komponen</th><th>File</th><th>Detail</th></tr>
+  <tr><td>UI</td><td><code>HomeScreen.kt</code></td><td><code>LazyColumn</code> menampilkan semua user</td></tr>
+  <tr><td>State</td><td><code>EcoBankViewModel.kt</code></td><td><code>allMembers: StateFlow&lt;List&lt;Member&gt;&gt;</code></td></tr>
+  <tr><td>Query</td><td><code>MemberDao.kt</code></td><td><code>getAllMembers(): Flow&lt;List&lt;Member&gt;&gt;</code> (ORDER BY id DESC)</td></tr>
+  <tr><td>Count</td><td><code>MemberDao.kt</code></td><td><code>getTotalMembers(): Flow&lt;Int&gt;</code> untuk header dashboard</td></tr>
+  <tr><td>Reaktivitas</td><td><code>EcoBankViewModel.kt</code></td><td><code>.stateIn(viewModelScope, SharingStarted.WhileSubscribed, emptyList())</code></td></tr>
+</table>
+
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>&#10003; Data tampil dari Room Database &mdash; diambil via Flow dari DAO</li>
+  <li>&#10003; Data otomatis update &mdash; menggunakan Kotlin Flow; UI recompose saat data berubah</li>
+</ul>
+
+<h3>FR-03 &mdash; Membership Card</h3>
+<p><strong>Deskripsi PRD:</strong> Menampilkan kartu member digital berisi: Nama, ID Member, Level Member, Total Poin.</p>
+
+<table>
+  <tr><th>Komponen</th><th>File</th><th>Detail</th></tr>
+  <tr><td>UI Kartu</td><td><code>MemberCardScreen.kt</code></td><td>Kartu bergaya digital card dengan gradient rose gold</td></tr>
+  <tr><td>ID Format</td><td><code>Member.kt</code></td><td>Extension: <code>formattedId()</code> &rarr; "NSB00001"</td></tr>
+  <tr><td>Level</td><td><code>Member.kt</code></td><td>Extension: <code>level()</code> &rarr; "Pemula" / "Aktif" / "Champion"</td></tr>
+  <tr><td>Data sumber</td><td><code>EcoBankViewModel.kt</code></td><td><code>currentMember: StateFlow&lt;Member?&gt;</code></td></tr>
+  <tr><td>Navigasi</td><td><code>MemberDetailScreen.kt</code></td><td>Tombol "Kartu Member" &rarr; MemberCardScreen</td></tr>
+</table>
+
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>&#10003; Data tampil sesuai database &mdash; kartu menampilkan data real-time dari <code>currentMember</code></li>
+  <li>&#10003; Semua informasi ada (Nama, ID, Level, Poin) &mdash; terlihat di MemberCardScreen</li>
+</ul>
+
+<h3>FR-04 &mdash; Tambah Transaksi (Setor Sampah)</h3>
+<p><strong>Deskripsi PRD:</strong> Mencatat transaksi pembelian, poin dihitung otomatis (1 poin = Rp10.000).</p>
+<p><strong>Adaptasi (Bank Sampah):</strong> Input adalah berat sampah per jenis, bukan nominal pembelian. Poin dihitung berdasarkan <code>pointsPerKg</code> setiap jenis sampah.</p>
+<p><strong>Formula:</strong></p>
+<pre>poin = (beratGram x pointsPerKg) / 1000</pre>
+
+<table>
+  <tr><th>Komponen</th><th>File</th><th>Detail</th></tr>
+  <tr><td>UI Pilihan Sampah</td><td><code>AddTransactionScreen.kt</code></td><td>Grid 2 kolom dari WASTE_TYPES (8 item)</td></tr>
+  <tr><td>Input Berat</td><td><code>AddTransactionScreen.kt</code></td><td>TextField dengan validasi angka positif</td></tr>
+  <tr><td>Kalkulasi Poin</td><td><code>EcoBankRepository.kt</code></td><td><code>addWasteTransaction()</code>: formula poin per jenis</td></tr>
+  <tr><td>Update Poin</td><td><code>EcoBankRepository.kt</code></td><td><code>memberDao.updateMember(member.copy(points = member.points + pointEarned))</code></td></tr>
+  <tr><td>Data Jenis Sampah</td><td><code>EcoBankData.kt</code></td><td>WASTE_TYPES list dengan pointsPerKg per item</td></tr>
+</table>
+
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>&#10003; Poin dihitung otomatis &mdash; via formula di Repository</li>
+  <li>&#10003; Riwayat tersimpan &mdash; <code>transactionDao.insertTransaction()</code> dipanggil bersamaan</li>
+</ul>
+
+<h3>FR-05 &mdash; Riwayat Transaksi</h3>
+<p><strong>Deskripsi PRD:</strong> Menampilkan transaksi member (tanggal, nominal/berat, poin).</p>
+
+<table>
+  <tr><th>Komponen</th><th>File</th><th>Detail</th></tr>
+  <tr><td>UI</td><td><code>TransactionHistoryScreen.kt</code></td><td>LazyColumn dengan item per transaksi</td></tr>
+  <tr><td>Summary Header</td><td><code>TransactionHistoryScreen.kt</code></td><td>Total poin, jumlah setor, total berat (kg)</td></tr>
+  <tr><td>Badge Type</td><td><code>TransactionHistoryScreen.kt</code></td><td>Badge hijau "SETOR" / badge merah "REDEEM"</td></tr>
+  <tr><td>Query</td><td><code>TransactionDao.kt</code></td><td><code>getTransactionsByMemberId(id): Flow&lt;List&lt;Transaction&gt;&gt;</code></td></tr>
+  <tr><td>State</td><td><code>EcoBankViewModel.kt</code></td><td><code>currentTransactions: StateFlow&lt;List&lt;Transaction&gt;&gt;</code> via flatMapLatest</td></tr>
+</table>
+
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>&#10003; Riwayat dapat dilihat kapan saja &mdash; data diambil dari Room, persisten</li>
+  <li>&#10003; Data mencakup tanggal, berat/jumlah, poin &mdash; tersimpan di kolom date, amount, pointEarned</li>
+</ul>
+
+<h3>FR-06 &mdash; Redeem Reward</h3>
+<p><strong>Deskripsi PRD:</strong> Menukarkan poin dengan hadiah. Reward: Espresso (50 poin), Cappuccino (100 poin), Latte (150 poin).</p>
+<p><strong>Adaptasi (Bank Sampah):</strong> Reward berupa kebutuhan rumah tangga dan e-money (bukan kopi), sesuai konteks bank sampah.</p>
+
+<table>
+  <tr><th>Komponen</th><th>File</th><th>Detail</th></tr>
+  <tr><td>UI Daftar Reward</td><td><code>RewardScreen.kt</code></td><td>Grid reward per kategori dari ECO_REWARDS</td></tr>
+  <tr><td>Konfirmasi</td><td><code>RewardScreen.kt</code></td><td>AlertDialog sebelum tukar</td></tr>
+  <tr><td>Feedback</td><td><code>RewardScreen.kt</code></td><td>SnackbarHost sukses/gagal</td></tr>
+  <tr><td>Validasi</td><td><code>EcoBankRepository.kt</code></td><td>Cek <code>member.points &gt;= reward.pointCost</code></td></tr>
+  <tr><td>Proses Redeem</td><td><code>EcoBankRepository.kt</code></td><td><code>redeemReward()</code>: insert REDEEM transaction + kurangi poin</td></tr>
+  <tr><td>Disabled State</td><td><code>RewardScreen.kt</code></td><td>Tombol disabled + teks "Kurang" jika poin tidak cukup</td></tr>
+</table>
+
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+  <li>&#10003; Poin berkurang setelah redeem &mdash; <code>member.points - reward.pointCost</code> di-update ke DB</li>
+  <li>&#10003; Tidak bisa redeem jika poin kurang &mdash; validasi di Repository, tombol disabled di UI</li>
+</ul>
+
+<hr class="divider">
+
+<!-- BAB 8 -->
+<h2>8. Pemenuhan Non-Functional Requirements</h2>
+
+<table>
+  <tr><th>Requirement</th><th>Target</th><th>Implementasi</th><th>Status</th></tr>
+  <tr><td>Startup</td><td>&lt; 3 detik</td><td>SplashScreen delay 2 detik; Room DB dibuat lazy</td><td class="status-done">DONE</td></tr>
+  <tr><td>Query Database</td><td>&lt; 500 ms</td><td>Room dengan Kotlin Flow (async, tidak blocking UI)</td><td class="status-done">DONE</td></tr>
+  <tr><td>Data persisten</td><td>Setelah app tutup</td><td>Room Database menyimpan ke SQLite lokal di device</td><td class="status-done">DONE</td></tr>
+  <tr><td>UI sederhana</td><td>Material Design 3</td><td>Jetpack Compose + Material3 components</td><td class="status-done">DONE</td></tr>
+  <tr><td>MVVM Architecture</td><td>Separation of concerns</td><td>ViewModel + Repository + DAO terpisah</td><td class="status-done">DONE</td></tr>
+  <tr><td>Repository Pattern</td><td>Single source of truth</td><td>EcoBankRepository sebagai satu-satunya akses data</td><td class="status-done">DONE</td></tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 9 -->
+<h2>9. Alur Navigasi Aplikasi</h2>
+
+<h3>Diagram Navigasi</h3>
+<table>
+  <tr><th>Dari Screen</th><th>Ke Screen</th><th>Trigger</th></tr>
+  <tr><td>Splash Screen</td><td>Role Selection</td><td>Otomatis setelah 2 detik</td></tr>
+  <tr><td>Role Selection</td><td>Admin Login</td><td>Tap kartu "Pengelola"</td></tr>
+  <tr><td>Role Selection</td><td>User Login</td><td>Tap kartu "User"</td></tr>
+  <tr><td>Admin Login</td><td>Home Screen</td><td>Login berhasil</td></tr>
+  <tr><td>User Login</td><td>Member Detail</td><td>Pilih akun / daftar baru</td></tr>
+  <tr><td>Home Screen</td><td>Add Member</td><td>Tap FAB (+)</td></tr>
+  <tr><td>Home Screen</td><td>Member Detail</td><td>Tap item user</td></tr>
+  <tr><td>Home Screen</td><td>Waste Catalog</td><td>Tap menu katalog</td></tr>
+  <tr><td>Member Detail</td><td>Member Card</td><td>Tap "Kartu Member"</td></tr>
+  <tr><td>Member Detail</td><td>Add Transaction</td><td>Tap "Setor Sampah"</td></tr>
+  <tr><td>Member Detail</td><td>Transaction History</td><td>Tap "Riwayat Setor"</td></tr>
+  <tr><td>Member Detail</td><td>Reward</td><td>Tap "Tukar Reward"</td></tr>
+  <tr><td>Member Detail</td><td>Waste Catalog</td><td>Tap "Katalog Sampah"</td></tr>
+  <tr><td>Member Detail (User)</td><td>Role Selection</td><td>Tap icon Logout</td></tr>
+  <tr><td>Home Screen (Admin)</td><td>Role Selection</td><td>Tap icon Logout</td></tr>
+</table>
+
+<h3>Detail Routes (NavGraph.kt) &mdash; 12 Routes</h3>
+<table>
+  <tr><th>Route</th><th>Screen</th><th>Parameter</th></tr>
+  <tr><td><code>splash</code></td><td>SplashScreen</td><td>-</td></tr>
+  <tr><td><code>role_selection</code></td><td>RoleSelectionScreen</td><td>-</td></tr>
+  <tr><td><code>admin_login</code></td><td>AdminLoginScreen</td><td>-</td></tr>
+  <tr><td><code>nasabah_login</code></td><td>UserLoginScreen</td><td>-</td></tr>
+  <tr><td><code>home</code></td><td>HomeScreen</td><td>-</td></tr>
+  <tr><td><code>add_member</code></td><td>AddMemberScreen</td><td>-</td></tr>
+  <tr><td><code>waste_catalog</code></td><td>WasteCatalogScreen</td><td>-</td></tr>
+  <tr><td><code>member_detail/{memberId}</code></td><td>MemberDetailScreen</td><td>memberId: Int</td></tr>
+  <tr><td><code>member_card/{memberId}</code></td><td>MemberCardScreen</td><td>memberId: Int</td></tr>
+  <tr><td><code>add_transaction/{memberId}</code></td><td>AddTransactionScreen</td><td>memberId: Int</td></tr>
+  <tr><td><code>transaction_history/{memberId}</code></td><td>TransactionHistoryScreen</td><td>memberId: Int</td></tr>
+  <tr><td><code>reward/{memberId}</code></td><td>RewardScreen</td><td>memberId: Int</td></tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 10 -->
+<h2>10. Deskripsi Setiap Screen</h2>
+
+<table>
+  <tr><th>#</th><th>Screen</th><th>Fungsi</th><th>Fitur Utama</th></tr>
+  <tr>
+    <td>1</td><td><strong>Splash Screen</strong></td>
+    <td>Tampilkan identitas aplikasi</td>
+    <td>Animasi spring + tween; auto-navigate ke RoleSelection setelah 2 detik</td>
+  </tr>
+  <tr>
+    <td>2</td><td><strong>Role Selection Screen</strong></td>
+    <td>Pilih peran pengguna</td>
+    <td>2 kartu role (Pengelola / User); animasi fade-in</td>
+  </tr>
+  <tr>
+    <td>3</td><td><strong>Admin Login Screen</strong></td>
+    <td>Autentikasi pengelola</td>
+    <td>Username + password dengan toggle show/hide; validasi inline</td>
+  </tr>
+  <tr>
+    <td>4</td><td><strong>User Login Screen</strong></td>
+    <td>Login atau registrasi user</td>
+    <td>Tab Masuk (search by nama/ID) + Tab Daftar Baru (form + auto-login)</td>
+  </tr>
+  <tr>
+    <td>5</td><td><strong>Home Screen</strong></td>
+    <td>Dashboard admin</td>
+    <td>Total user, LazyColumn daftar user, FAB tambah user, logout</td>
+  </tr>
+  <tr>
+    <td>6</td><td><strong>Add Member Screen</strong></td>
+    <td>Registrasi user baru (admin)</td>
+    <td>Form nama, email, HP; validasi lengkap</td>
+  </tr>
+  <tr>
+    <td>7</td><td><strong>Member Detail Screen</strong></td>
+    <td>Profil user + menu aksi</td>
+    <td>Header profil, grid 2x2 menu, katalog sampah full-width, role-aware action</td>
+  </tr>
+  <tr>
+    <td>8</td><td><strong>Member Card Screen</strong></td>
+    <td>Kartu membership digital</td>
+    <td>Nama, ID NSBxxxxx, level, total poin, tanggal bergabung; desain rose gold</td>
+  </tr>
+  <tr>
+    <td>9</td><td><strong>Add Transaction Screen</strong></td>
+    <td>Catat setoran sampah</td>
+    <td>Grid pilih jenis sampah (8 item), input berat gram, preview estimasi poin</td>
+  </tr>
+  <tr>
+    <td>10</td><td><strong>Transaction History Screen</strong></td>
+    <td>Riwayat transaksi user</td>
+    <td>Summary header (total poin, jumlah setor, total kg), badge SETOR/REDEEM</td>
+  </tr>
+  <tr>
+    <td>11</td><td><strong>Reward Screen</strong></td>
+    <td>Penukaran poin</td>
+    <td>Grid reward 2 kategori, AlertDialog konfirmasi, Snackbar feedback, disabled jika poin kurang</td>
+  </tr>
+  <tr>
+    <td>12</td><td><strong>Waste Catalog Screen</strong></td>
+    <td>Referensi jenis sampah</td>
+    <td>8 jenis sampah dengan poin/kg dan deskripsi; akses dari admin dan user</td>
+  </tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 11 -->
+<h2>11. Fitur Tambahan (Beyond PRD)</h2>
+
+<table>
+  <tr><th>Fitur</th><th>Deskripsi</th></tr>
+  <tr><td>Role-Based Access</td><td>Pemisahan akses Pengelola vs User dengan autentikasi masing-masing</td></tr>
+  <tr><td>User Self-Register</td><td>User dapat mendaftar sendiri tanpa melalui admin (via tab Daftar Baru)</td></tr>
+  <tr><td>Sistem Level Otomatis</td><td>Level Pemula/Aktif/Champion naik otomatis berdasarkan total poin</td></tr>
+  <tr><td>Katalog Sampah</td><td>8 jenis sampah dengan nilai poin berbeda-beda (vs PRD yang tidak punya katalog)</td></tr>
+  <tr><td>Reward Beragam</td><td>7 jenis reward (kebutuhan RT + e-money) vs 3 reward kopi di PRD asli</td></tr>
+  <tr><td>Custom App Icon</td><td>Icon EcoBank: simbol daur ulang + daun pada background rose gold</td></tr>
+  <tr><td>Adaptive Icon</td><td>Mendukung adaptive icon Android 8.0+ (API 26)</td></tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 12 -->
+<h2>12. Definition of Done (DoD) Checklist</h2>
+
+<table>
+  <tr><th>#</th><th>Kriteria</th><th>Status</th><th>Bukti Implementasi</th></tr>
+  <tr>
+    <td>1</td><td>Registrasi member berjalan</td>
+    <td class="status-done">DONE</td>
+    <td><code>AddMemberScreen.kt</code>, <code>NasabahLoginScreen.kt</code> (tab Daftar)</td>
+  </tr>
+  <tr>
+    <td>2</td><td>Data tersimpan di Room Database</td>
+    <td class="status-done">DONE</td>
+    <td><code>AppDatabase.kt</code>, <code>MemberDao.kt</code>, <code>TransactionDao.kt</code></td>
+  </tr>
+  <tr>
+    <td>3</td><td>Membership card tampil</td>
+    <td class="status-done">DONE</td>
+    <td><code>MemberCardScreen.kt</code></td>
+  </tr>
+  <tr>
+    <td>4</td><td>Poin dihitung otomatis</td>
+    <td class="status-done">DONE</td>
+    <td><code>EcoBankRepository.addWasteTransaction()</code></td>
+  </tr>
+  <tr>
+    <td>5</td><td>Riwayat transaksi tampil</td>
+    <td class="status-done">DONE</td>
+    <td><code>TransactionHistoryScreen.kt</code></td>
+  </tr>
+  <tr>
+    <td>6</td><td>Reward dapat ditukar</td>
+    <td class="status-done">DONE</td>
+    <td><code>RewardScreen.kt</code>, <code>EcoBankRepository.redeemReward()</code></td>
+  </tr>
+  <tr>
+    <td>7</td><td>Navigasi antar halaman berfungsi</td>
+    <td class="status-done">DONE</td>
+    <td><code>NavGraph.kt</code> dengan 12 routes</td>
+  </tr>
+  <tr>
+    <td>8</td><td>Tidak terdapat error saat pengujian</td>
+    <td class="status-done">DONE</td>
+    <td>Diuji pada emulator API 34</td>
+  </tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 13 -->
+<h2>13. Deliverables</h2>
+
+<table>
+  <tr><th>#</th><th>Deliverable</th><th>Status</th></tr>
+  <tr><td>1</td><td>Source Code Kotlin</td><td class="status-done">DONE &mdash; 12 screen + data layer + ViewModel</td></tr>
+  <tr><td>2</td><td>Room Database Implementation</td><td class="status-done">DONE &mdash; AppDatabase v2, 2 tabel, 2 DAO</td></tr>
+  <tr><td>3</td><td>Jetpack Compose UI</td><td class="status-done">DONE &mdash; Seluruh UI menggunakan Compose + Material 3</td></tr>
+  <tr><td>4</td><td>MVVM Architecture</td><td class="status-done">DONE &mdash; ViewModel + Repository + DAO terstruktur</td></tr>
+  <tr><td>5</td><td>APK File</td><td class="status-done">DONE &mdash; Dapat di-build dari Android Studio</td></tr>
+  <tr><td>6</td><td>User Manual</td><td class="status-done">DONE &mdash; README.md</td></tr>
+  <tr><td>7</td><td>Laporan Project</td><td class="status-done">DONE &mdash; LAPORAN.md + LAPORAN.html</td></tr>
+</table>
+
+<hr class="divider">
+
+<!-- BAB 14 -->
+<h2>14. Kesimpulan</h2>
+
+<p>
+  Aplikasi <strong>EcoBank</strong> berhasil dibangun sebagai solusi digital untuk pengelolaan bank sampah,
+  mengimplementasikan seluruh functional requirement yang tercantum dalam PRD dengan adaptasi konteks
+  dari coffee shop membership ke bank sampah. Semua kriteria Definition of Done telah terpenuhi.
+</p>
+<p>
+  Aplikasi menggunakan arsitektur MVVM yang bersih dengan pemisahan jelas antara layer presentasi (Compose UI),
+  layer logika (ViewModel), layer akses data (Repository + DAO), dan layer penyimpanan (Room Database).
+  Reaktivitas data dijamin melalui penggunaan Kotlin Flow dan StateFlow sehingga UI selalu sinkron dengan data
+  tanpa perlu refresh manual.
+</p>
+<p>
+  Fitur tambahan yang diimplementasikan melebihi PRD antara lain: sistem role-based access (Pengelola vs User),
+  registrasi mandiri oleh user, sistem level otomatis (Pemula/Aktif/Champion), katalog sampah interaktif,
+  dan 7 jenis reward yang beragam.
+</p>
+<p>
+  Pengembangan ke depan (Version 2.0) dapat mencakup Firebase Authentication, Cloud Sync,
+  QR Code untuk kartu member, dan fitur analytics dashboard.
+</p>
+
+</body>
+</html>
