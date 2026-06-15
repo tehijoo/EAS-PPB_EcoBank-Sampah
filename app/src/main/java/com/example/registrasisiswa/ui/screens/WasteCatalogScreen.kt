@@ -23,6 +23,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,7 +32,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,15 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.registrasisiswa.ui.model.WASTE_TYPES
 import com.example.registrasisiswa.ui.model.WasteType
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldLight
-import com.example.registrasisiswa.ui.theme.SuccessGreen
-import com.example.registrasisiswa.ui.theme.SuccessGreenBg
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.Black
+import com.example.registrasisiswa.ui.theme.KatalogBg
+import com.example.registrasisiswa.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,16 +51,16 @@ fun WasteCatalogScreen(onNavigateBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Katalog Sampah", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Katalog Sampah", color = Black, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Black)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = KatalogBg)
             )
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -81,25 +75,25 @@ fun WasteCatalogScreen(onNavigateBack: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            Brush.horizontalGradient(listOf(RoseGold, RoseGoldDark)),
+                            KatalogBg,
                             RoundedCornerShape(20.dp)
                         )
                         .padding(20.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "♻️", fontSize = 42.sp)
+                        Text(text = "🌱", fontSize = 42.sp)
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
                             Text(
                                 "Setor Sampah, Dapat Poin!",
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 16.sp,
-                                color = Color.White
+                                color = Black
                             )
                             Text(
                                 "Sampah kamu bernilai di sini.\nSetor dan kumpulkan poin untuk reward!",
                                 fontSize = 12.sp,
-                                color = Color.White.copy(alpha = 0.85f)
+                                color = Black.copy(alpha = 0.7f)
                             )
                         }
                     }
@@ -110,7 +104,7 @@ fun WasteCatalogScreen(onNavigateBack: () -> Unit) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    color = SuccessGreenBg
+                    color = KatalogBg.copy(alpha = 0.5f)
                 ) {
                     Row(
                         modifier = Modifier.padding(12.dp),
@@ -121,7 +115,7 @@ fun WasteCatalogScreen(onNavigateBack: () -> Unit) {
                         Text(
                             "Poin dihitung per kilogram (kg) sampah yang disetor",
                             fontSize = 12.sp,
-                            color = SuccessGreen,
+                            color = Black,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -146,7 +140,7 @@ fun WasteCatalogScreen(onNavigateBack: () -> Unit) {
                             text = "Kategori $category",
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
-                            color = DarkText
+                            color = Black
                         )
                     }
                 }
@@ -161,13 +155,13 @@ fun WasteCatalogScreen(onNavigateBack: () -> Unit) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    color = RoseGoldLight.copy(alpha = 0.4f)
+                    color = KatalogBg.copy(alpha = 0.3f)
                 ) {
                     Column(
                         modifier = Modifier.padding(14.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("📌 Catatan Penting", fontWeight = FontWeight.Bold, color = RoseGoldDark, fontSize = 13.sp)
+                        Text("📌 Catatan Penting", fontWeight = FontWeight.Bold, color = Black, fontSize = 13.sp)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             "• Sampah harus bersih dan kering\n" +
@@ -175,7 +169,7 @@ fun WasteCatalogScreen(onNavigateBack: () -> Unit) {
                             "• Hubungi petugas untuk sampah besar\n" +
                             "• Elektronik dikemas aman sebelum disetor",
                             fontSize = 12.sp,
-                            color = RoseGoldDark,
+                            color = Black.copy(alpha = 0.7f),
                             textAlign = TextAlign.Start
                         )
                     }
@@ -192,7 +186,7 @@ fun WasteCatalogItem(waste: WasteType) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        colors = CardDefaults.cardColors(containerColor = White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -201,23 +195,10 @@ fun WasteCatalogItem(waste: WasteType) {
                 .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // IMAGE PLACEHOLDER
-            // TODO: Ganti Box di bawah ini dengan Image saat gambar sudah siap:
-            //
-            // Image(
-            //     painter = painterResource(id = R.drawable.${waste.imageResName}),
-            //     contentDescription = waste.name,
-            //     modifier = Modifier
-            //         .size(64.dp)
-            //         .clip(RoundedCornerShape(12.dp)),
-            //     contentScale = ContentScale.Crop
-            // )
-            //
-            // File gambar letakkan di: app/src/main/res/drawable/${waste.imageResName}.png
             Box(
                 modifier = Modifier
                     .size(64.dp)
-                    .background(RoseGoldLight, RoundedCornerShape(12.dp)),
+                    .background(KatalogBg.copy(alpha = 0.2f), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -225,7 +206,7 @@ fun WasteCatalogItem(waste: WasteType) {
                     Text(
                         text = "📷",
                         fontSize = 10.sp,
-                        color = MediumText.copy(alpha = 0.5f)
+                        color = Black.copy(alpha = 0.3f)
                     )
                 }
             }
@@ -237,23 +218,23 @@ fun WasteCatalogItem(waste: WasteType) {
                     text = waste.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = DarkText
+                    color = Black
                 )
                 Text(
                     text = waste.description,
                     fontSize = 11.sp,
-                    color = MediumText
+                    color = Black.copy(alpha = 0.6f)
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Surface(
-                    color = SuccessGreenBg,
+                    color = KatalogBg.copy(alpha = 0.4f),
                     shape = RoundedCornerShape(50)
                 ) {
                     Text(
                         text = "${waste.pointsPerKg} poin/kg",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = SuccessGreen,
+                        color = Black,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
                     )
                 }
@@ -264,9 +245,9 @@ fun WasteCatalogItem(waste: WasteType) {
                     text = "${waste.pointsPerKg}",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = RoseGold
+                    color = MaterialTheme.colorScheme.primary
                 )
-                Text(text = "poin/kg", fontSize = 9.sp, color = MediumText)
+                Text(text = "poin/kg", fontSize = 9.sp, color = Black.copy(alpha = 0.6f))
             }
         }
     }

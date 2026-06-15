@@ -2,35 +2,28 @@ package com.example.registrasisiswa.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Rose Gold Primary
-val RoseGold = Color(0xFFBF7182)
-val RoseGoldDark = Color(0xFF9D5B6B)
-val RoseGoldDeep = Color(0xFF6B3A45)
-val RoseGoldLight = Color(0xFFFFD9E2)
-val OnRoseGold = Color(0xFFFFFFFF)
-val OnRoseGoldLight = Color(0xFF3E001E)
+// EcoBank Updated Color Palette
+val PrimaryGreen = Color(0xFF427329)
+val SecondaryGreen = Color(0xFFA3CD91)
 
-// Secondary Mauve/Warm
-val WarmMauve = Color(0xFF815368)
-val WarmMauveLight = Color(0xFFFFD8E7)
-val OnWarmMauve = Color(0xFFFFFFFF)
+val White = Color(0xFFFFFFFF)
+val Black = Color(0xFF000000)
 
-// Tertiary Golden
-val GoldenBrown = Color(0xFF8A5100)
-val GoldenBrownLight = Color(0xFFFFDDB7)
+// Dashboard / Dashboard Card Specifics
+val DashboardBg = Color(0xFF427329)
+val PengelolaCardBg = Color(0xFFCBC99D)
+val PenggunaCardBg = Color(0xFFF3E9D7)
+val KatalogBg = Color(0xFFA3CD91)
 
-// Background & Surface - Cream / Broken White
-val BackgroundCream = Color(0xFFFFF8F9)
-val SurfaceWhite = Color(0xFFFFFFFF)
-val SurfaceCard = Color(0xFFFFF0F3)
-val SurfaceVariantRose = Color(0xFFF4DDDF)
+// Legacy / Utility mapping (kept if needed by other components, but updated where possible)
+val RoseGold = PrimaryGreen
+val RoseGoldLight = SecondaryGreen
+val OnRoseGold = White
 
-// Text
-val DarkText = Color(0xFF201A1B)
-val MediumText = Color(0xFF524346)
-val LightText = Color(0xFF857379)
+val BackgroundCream = White
+val SurfaceWhite = White
 
-// Member Level Colors
+// Level Colors
 val GoldLevel = Color(0xFFDAA520)
 val GoldLevelBg = Color(0xFFFFF3CD)
 val SilverLevel = Color(0xFF757575)

@@ -29,6 +29,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -55,23 +56,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.registrasisiswa.data.entity.Member
+import com.example.registrasisiswa.data.entity.Pengguna
 import com.example.registrasisiswa.data.entity.formattedId
 import com.example.registrasisiswa.data.entity.level
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldLight
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.Black
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NasabahLoginScreen(
+fun PenggunaLoginScreen(
     viewModel: EcoBankViewModel,
-    onLoginSuccess: (memberId: Int) -> Unit,
+    onLoginSuccess: (penggunaId: Int) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -80,16 +76,16 @@ fun NasabahLoginScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Portal Nasabah", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Portal Pengguna", color = White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -98,12 +94,12 @@ fun NasabahLoginScreen(
         ) {
             TabRow(
                 selectedTabIndex = selectedTab,
-                containerColor = RoseGold,
-                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = White,
                 indicator = { tabPositions ->
                     TabRowDefaults.SecondaryIndicator(
                         modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                        color = Color.White
+                        color = White
                     )
                 }
             ) {
@@ -115,7 +111,7 @@ fun NasabahLoginScreen(
                             Text(
                                 title,
                                 fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
-                                color = Color.White
+                                color = White
                             )
                         }
                     )
@@ -123,24 +119,24 @@ fun NasabahLoginScreen(
             }
 
             when (selectedTab) {
-                0 -> NasabahLoginTab(viewModel = viewModel, onLoginSuccess = onLoginSuccess)
-                1 -> NasabahRegisterTab(viewModel = viewModel, onRegisterSuccess = onLoginSuccess)
+                0 -> PenggunaLoginTab(viewModel = viewModel, onLoginSuccess = onLoginSuccess)
+                1 -> PenggunaRegisterTab(viewModel = viewModel, onRegisterSuccess = onLoginSuccess)
             }
         }
     }
 }
 
 @Composable
-fun NasabahLoginTab(
+fun PenggunaLoginTab(
     viewModel: EcoBankViewModel,
-    onLoginSuccess: (memberId: Int) -> Unit
+    onLoginSuccess: (penggunaId: Int) -> Unit
 ) {
-    val allMembers by viewModel.allMembers.collectAsState()
+    val allPengguna by viewModel.allPengguna.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
 
-    val searchResults = remember(searchQuery, allMembers) {
-        if (searchQuery.isBlank()) allMembers
-        else allMembers.filter {
+    val searchResults = remember(searchQuery, allPengguna) {
+        if (searchQuery.isBlank()) allPengguna
+        else allPengguna.filter {
             it.name.contains(searchQuery, ignoreCase = true) ||
             it.formattedId().contains(searchQuery, ignoreCase = true)
         }
@@ -150,45 +146,45 @@ fun NasabahLoginTab(
         // Search area
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            color = RoseGoldLight
+            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text("Cari akun Anda", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = RoseGoldDark)
-                Text("Ketik nama atau ID nasabah", fontSize = 12.sp, color = RoseGoldDark.copy(alpha = 0.7f))
+                Text("Cari akun Anda", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Black)
+                Text("Ketik nama atau ID pengguna", fontSize = 12.sp, color = Black.copy(alpha = 0.6f))
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = { Text("Nama atau NSB00001...") },
+                    placeholder = { Text("Nama atau PGN00001...") },
                     leadingIcon = {
-                        Icon(Icons.Default.Search, contentDescription = null, tint = RoseGold)
+                        Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = RoseGold,
-                        unfocusedBorderColor = RoseGold.copy(alpha = 0.4f),
-                        focusedLabelColor = RoseGold,
-                        cursorColor = RoseGold,
-                        unfocusedContainerColor = SurfaceWhite,
-                        focusedContainerColor = SurfaceWhite
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        unfocusedContainerColor = White,
+                        focusedContainerColor = White
                     ),
                     singleLine = true
                 )
             }
         }
 
-        if (allMembers.isEmpty()) {
+        if (allPengguna.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(32.dp)) {
                     Text("👤", fontSize = 52.sp)
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text("Belum ada nasabah terdaftar", fontWeight = FontWeight.Bold, color = DarkText)
+                    Text("Belum ada pengguna terdaftar", fontWeight = FontWeight.Bold, color = Black)
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         "Hubungi pengelola untuk mendaftarkan akun Anda, atau gunakan tab Daftar Baru.",
                         fontSize = 12.sp,
-                        color = MediumText,
+                        color = Black.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -198,7 +194,7 @@ fun NasabahLoginTab(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("🔍", fontSize = 40.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("\"$searchQuery\" tidak ditemukan", color = MediumText, fontSize = 14.sp)
+                    Text("\"$searchQuery\" tidak ditemukan", color = Black.copy(alpha = 0.6f), fontSize = 14.sp)
                 }
             }
         } else {
@@ -208,13 +204,13 @@ fun NasabahLoginTab(
             ) {
                 if (searchQuery.isBlank()) {
                     item {
-                        Text("Pilih akun Anda", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = DarkText)
+                        Text("Pilih akun Anda", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Black)
                     }
                 }
-                items(searchResults) { member ->
-                    NasabahLoginCard(member = member, onClick = {
-                        viewModel.loginAsNasabah(member.id)
-                        onLoginSuccess(member.id)
+                items(searchResults) { pengguna ->
+                    PenggunaLoginCard(pengguna = pengguna, onClick = {
+                        viewModel.loginAsPengguna(pengguna.id)
+                        onLoginSuccess(pengguna.id)
                     })
                 }
             }
@@ -223,13 +219,13 @@ fun NasabahLoginTab(
 }
 
 @Composable
-fun NasabahLoginCard(member: Member, onClick: () -> Unit) {
+fun PenggunaLoginCard(pengguna: Pengguna, onClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        color = SurfaceWhite,
+        color = White,
         shadowElevation = 2.dp
     ) {
         Row(
@@ -239,31 +235,31 @@ fun NasabahLoginCard(member: Member, onClick: () -> Unit) {
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(RoseGoldLight, CircleShape),
+                    .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    member.name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                    pengguna.name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = RoseGoldDark
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(member.name, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = DarkText)
-                Text(member.formattedId(), fontSize = 11.sp, color = MediumText)
-                Text("${member.points} poin  •  ${member.level()}", fontSize = 11.sp, color = RoseGoldDark)
+                Text(pengguna.name, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = Black)
+                Text(pengguna.formattedId(), fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
+                Text("${pengguna.points} poin  •  ${pengguna.level()}", fontSize = 11.sp, color = MaterialTheme.colorScheme.primary)
             }
             Surface(
-                color = RoseGoldLight,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
                     "Masuk",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = RoseGoldDark,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                 )
             }
@@ -272,9 +268,9 @@ fun NasabahLoginCard(member: Member, onClick: () -> Unit) {
 }
 
 @Composable
-fun NasabahRegisterTab(
+fun PenggunaRegisterTab(
     viewModel: EcoBankViewModel,
-    onRegisterSuccess: (memberId: Int) -> Unit
+    onRegisterSuccess: (penggunaId: Int) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -294,14 +290,14 @@ fun NasabahRegisterTab(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
-            color = RoseGoldLight
+            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
         ) {
             Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text("👤", fontSize = 24.sp)
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
-                    Text("Daftar sebagai Nasabah Baru", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = RoseGoldDark)
-                    Text("Isi data diri Anda untuk bergabung", fontSize = 11.sp, color = RoseGoldDark.copy(alpha = 0.75f))
+                    Text("Daftar sebagai Pengguna Baru", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Black)
+                    Text("Isi data diri Anda untuk bergabung", fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                 }
             }
         }
@@ -309,14 +305,14 @@ fun NasabahRegisterTab(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            color = SurfaceWhite,
+            color = White,
             shadowElevation = 2.dp
         ) {
             Column(
                 modifier = Modifier.padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Text("Data Diri", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = DarkText)
+                Text("Data Diri", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Black)
 
                 OutlinedTextField(
                     value = name,
@@ -328,9 +324,9 @@ fun NasabahRegisterTab(
                     isError = nameError.isNotEmpty(),
                     supportingText = { if (nameError.isNotEmpty()) Text(nameError, color = Color.Red) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = RoseGold,
-                        focusedLabelColor = RoseGold,
-                        cursorColor = RoseGold
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        cursorColor = MaterialTheme.colorScheme.primary
                     ),
                     singleLine = true
                 )
@@ -346,9 +342,9 @@ fun NasabahRegisterTab(
                     isError = emailError.isNotEmpty(),
                     supportingText = { if (emailError.isNotEmpty()) Text(emailError, color = Color.Red) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = RoseGold,
-                        focusedLabelColor = RoseGold,
-                        cursorColor = RoseGold
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        cursorColor = MaterialTheme.colorScheme.primary
                     ),
                     singleLine = true
                 )
@@ -364,9 +360,9 @@ fun NasabahRegisterTab(
                     isError = phoneError.isNotEmpty(),
                     supportingText = { if (phoneError.isNotEmpty()) Text(phoneError, color = Color.Red) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = RoseGold,
-                        focusedLabelColor = RoseGold,
-                        cursorColor = RoseGold
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        cursorColor = MaterialTheme.colorScheme.primary
                     ),
                     singleLine = true
                 )
@@ -380,16 +376,16 @@ fun NasabahRegisterTab(
                 if (email.isBlank() || !email.contains("@")) { emailError = "Email tidak valid"; valid = false }
                 if (phone.isBlank() || phone.length < 9) { phoneError = "Nomor HP tidak valid"; valid = false }
                 if (valid) {
-                    viewModel.registerAndLoginAsNasabah(name, email, phone) { newId ->
+                    viewModel.registerAndLoginAsPengguna(name, email, phone) { newId ->
                         onRegisterSuccess(newId)
                     }
                 }
             },
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = RoseGoldDark)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text("✅  Daftar & Masuk", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.White)
+            Text("✅  Daftar & Masuk", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = White)
         }
 
         Spacer(modifier = Modifier.height(8.dp))

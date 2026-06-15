@@ -1,29 +1,29 @@
 package com.example.registrasisiswa.data.repository
 
-import com.example.registrasisiswa.data.dao.MemberDao
+import com.example.registrasisiswa.data.dao.PenggunaDao
 import com.example.registrasisiswa.data.dao.TransactionDao
-import com.example.registrasisiswa.data.entity.Member
+import com.example.registrasisiswa.data.entity.Pengguna
 import com.example.registrasisiswa.data.entity.Transaction
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class EcoBankRepository(
-    private val memberDao: MemberDao,
+    private val penggunaDao: PenggunaDao,
     private val transactionDao: TransactionDao
 ) {
-    fun getAllMembers() = memberDao.getAllMembers()
-    fun getMemberById(id: Int) = memberDao.getMemberById(id)
-    fun getTotalMembers() = memberDao.getTotalMembers()
-    fun getTransactionsByMemberId(memberId: Int) = transactionDao.getTransactionsByMemberId(memberId)
+    fun getAllPengguna() = penggunaDao.getAllPengguna()
+    fun getPenggunaById(id: Int) = penggunaDao.getPenggunaById(id)
+    fun getTotalPengguna() = penggunaDao.getTotalPengguna()
+    fun getTransactionsByPenggunaId(penggunaId: Int) = transactionDao.getTransactionsByPenggunaId(penggunaId)
 
-    suspend fun insertMember(member: Member) = memberDao.insertMember(member)
-    suspend fun insertMemberAndGetId(member: Member): Int = memberDao.insertMember(member).toInt()
-    suspend fun updateMember(member: Member) = memberDao.updateMember(member)
-    suspend fun deleteMember(member: Member) = memberDao.deleteMember(member)
+    suspend fun insertPengguna(pengguna: Pengguna) = penggunaDao.insertPengguna(pengguna)
+    suspend fun insertPenggunaAndGetId(pengguna: Pengguna): Int = penggunaDao.insertPengguna(pengguna).toInt()
+    suspend fun updatePengguna(pengguna: Pengguna) = penggunaDao.updatePengguna(pengguna)
+    suspend fun deletePengguna(pengguna: Pengguna) = penggunaDao.deletePengguna(pengguna)
 
     suspend fun addWasteTransaction(
-        member: Member,
+        pengguna: Pengguna,
         wasteType: String,
         weightGrams: Double,
         pointsPerKg: Int
@@ -32,7 +32,7 @@ class EcoBankRepository(
         val date = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale("id", "ID")).format(Date())
         transactionDao.insertTransaction(
             Transaction(
-                memberId = member.id,
+                penggunaId = pengguna.id,
                 amount = weightGrams,
                 pointEarned = pointEarned,
                 date = date,
@@ -40,15 +40,15 @@ class EcoBankRepository(
                 description = wasteType
             )
         )
-        memberDao.updateMember(member.copy(points = member.points + pointEarned))
+        penggunaDao.updatePengguna(pengguna.copy(points = pengguna.points + pointEarned))
     }
 
-    suspend fun redeemReward(member: Member, pointCost: Int, rewardName: String): Boolean {
-        if (member.points < pointCost) return false
+    suspend fun redeemReward(pengguna: Pengguna, pointCost: Int, rewardName: String): Boolean {
+        if (pengguna.points < pointCost) return false
         val date = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale("id", "ID")).format(Date())
         transactionDao.insertTransaction(
             Transaction(
-                memberId = member.id,
+                penggunaId = pengguna.id,
                 amount = 0.0,
                 pointEarned = -pointCost,
                 date = date,
@@ -56,7 +56,7 @@ class EcoBankRepository(
                 description = rewardName
             )
         )
-        memberDao.updateMember(member.copy(points = member.points - pointCost))
+        penggunaDao.updatePengguna(pengguna.copy(points = pengguna.points - pointCost))
         return true
     }
 }

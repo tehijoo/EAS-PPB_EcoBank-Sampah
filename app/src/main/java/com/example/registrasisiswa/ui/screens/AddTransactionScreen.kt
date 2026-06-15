@@ -16,9 +16,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -33,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -56,15 +54,8 @@ import androidx.compose.ui.unit.sp
 import com.example.registrasisiswa.data.entity.formattedId
 import com.example.registrasisiswa.ui.model.WASTE_TYPES
 import com.example.registrasisiswa.ui.model.WasteType
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldLight
-import com.example.registrasisiswa.ui.theme.SuccessGreen
-import com.example.registrasisiswa.ui.theme.SuccessGreenBg
-import com.example.registrasisiswa.ui.theme.SurfaceWhite
+import com.example.registrasisiswa.ui.theme.Black
+import com.example.registrasisiswa.ui.theme.White
 import com.example.registrasisiswa.viewmodel.EcoBankViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +64,7 @@ fun AddTransactionScreen(
     viewModel: EcoBankViewModel,
     onNavigateBack: () -> Unit
 ) {
-    val member by viewModel.currentMember.collectAsState()
+    val pengguna by viewModel.currentPengguna.collectAsState()
     var selectedWaste by remember { mutableStateOf<WasteType?>(null) }
     var weightText by remember { mutableStateOf("") }
     var weightError by remember { mutableStateOf("") }
@@ -84,18 +75,18 @@ fun AddTransactionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Setor Sampah", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("Setor Sampah", color = White, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali", tint = White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = RoseGold)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
-        containerColor = BackgroundCream
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
-        member?.let { m ->
+        pengguna?.let { p ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -104,22 +95,22 @@ fun AddTransactionScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                // Member info
+                // Pengguna info
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
-                    color = RoseGoldLight
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                 ) {
                     Row(
                         modifier = Modifier.padding(14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("♻️", fontSize = 28.sp)
+                        Text("🌱", fontSize = 28.sp)
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
-                            Text(m.name, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = RoseGoldDark)
-                            Text(m.formattedId(), fontSize = 12.sp, color = RoseGoldDark.copy(alpha = 0.7f))
-                            Text("Poin saat ini: ${m.points}", fontSize = 12.sp, color = RoseGoldDark)
+                            Text(p.name, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.primary)
+                            Text(p.formattedId(), fontSize = 12.sp, color = Black.copy(alpha = 0.6f))
+                            Text("Poin saat ini: ${p.points}", fontSize = 12.sp, color = Black.copy(alpha = 0.8f))
                         }
                     }
                 }
@@ -128,30 +119,30 @@ fun AddTransactionScreen(
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    color = SurfaceWhite,
+                    color = White,
                     shadowElevation = 2.dp
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Surface(
-                                color = RoseGold,
+                                color = MaterialTheme.colorScheme.primary,
                                 shape = RoundedCornerShape(50)
                             ) {
                                 Text(
                                     "1",
-                                    color = Color.White,
+                                    color = White,
                                     fontWeight = FontWeight.ExtraBold,
                                     fontSize = 12.sp,
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                                 )
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Pilih Jenis Sampah", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = DarkText)
+                            Text("Pilih Jenis Sampah", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Black)
                         }
 
                         if (selectedWaste != null) {
                             Spacer(modifier = Modifier.height(8.dp))
-                            Surface(color = SuccessGreenBg, shape = RoundedCornerShape(10.dp)) {
+                            Surface(color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f), shape = RoundedCornerShape(10.dp)) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth().padding(10.dp),
                                     verticalAlignment = Alignment.CenterVertically
@@ -159,23 +150,22 @@ fun AddTransactionScreen(
                                     Text(selectedWaste!!.emoji, fontSize = 20.sp)
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Column(modifier = Modifier.weight(1f)) {
-                                        Text(selectedWaste!!.name, fontWeight = FontWeight.Bold, color = SuccessGreen)
-                                        Text("${selectedWaste!!.pointsPerKg} poin/kg", fontSize = 11.sp, color = SuccessGreen)
+                                        Text(selectedWaste!!.name, fontWeight = FontWeight.Bold, color = Black)
+                                        Text("${selectedWaste!!.pointsPerKg} poin/kg", fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                                     }
-                                    Icon(Icons.Default.Check, contentDescription = null, tint = SuccessGreen)
+                                    Icon(Icons.Default.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                                 }
                             }
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
                                 "Ketuk untuk ganti",
                                 fontSize = 11.sp,
-                                color = MediumText,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.clickable { selectedWaste = null }
                             )
                         } else {
                             Spacer(modifier = Modifier.height(12.dp))
-                            // Grid 2 kolom untuk jenis sampah
-                            // Tidak bisa pakai LazyVerticalGrid di dalam scroll, jadi kita buat manual grid
+                            // Manual grid
                             val chunked = WASTE_TYPES.chunked(2)
                             chunked.forEach { row ->
                                 Row(
@@ -198,22 +188,22 @@ fun AddTransactionScreen(
                     }
                 }
 
-                // Step 2: Input berat (hanya muncul setelah pilih jenis)
+                // Step 2: Input berat
                 if (selectedWaste != null) {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        color = SurfaceWhite,
+                        color = White,
                         shadowElevation = 2.dp
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Surface(color = RoseGold, shape = RoundedCornerShape(50)) {
-                                    Text("2", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 12.sp,
+                                Surface(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)) {
+                                    Text("2", color = White, fontWeight = FontWeight.ExtraBold, fontSize = 12.sp,
                                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Masukkan Berat Sampah", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = DarkText)
+                                Text("Masukkan Berat Sampah", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Black)
                             }
 
                             Spacer(modifier = Modifier.height(12.dp))
@@ -223,34 +213,34 @@ fun AddTransactionScreen(
                                 onValueChange = { weightText = it.filter { c -> c.isDigit() || c == '.' }; weightError = "" },
                                 label = { Text("Berat (gram)") },
                                 placeholder = { Text("Contoh: 500") },
-                                suffix = { Text("gram", color = MediumText) },
+                                suffix = { Text("gram", color = Black.copy(alpha = 0.5f)) },
                                 isError = weightError.isNotEmpty(),
                                 supportingText = {
                                     if (weightError.isNotEmpty()) Text(weightError, color = Color.Red)
-                                    else Text("Masukkan berat dalam satuan gram", color = MediumText, fontSize = 11.sp)
+                                    else Text("Masukkan berat dalam satuan gram", color = Black.copy(alpha = 0.5f), fontSize = 11.sp)
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp),
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = RoseGold,
-                                    focusedLabelColor = RoseGold,
-                                    cursorColor = RoseGold
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                    cursorColor = MaterialTheme.colorScheme.primary
                                 ),
                                 singleLine = true
                             )
 
                             Spacer(modifier = Modifier.height(10.dp))
-                            HorizontalDivider(color = RoseGoldLight)
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(10.dp))
 
                             // Formula hint
-                            Surface(color = BackgroundCream, shape = RoundedCornerShape(10.dp)) {
+                            Surface(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), shape = RoundedCornerShape(10.dp)) {
                                 Column(modifier = Modifier.padding(10.dp)) {
-                                    Text("📌 Rumus Poin", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MediumText)
-                                    Text("Berat (g) × ${selectedWaste!!.pointsPerKg} ÷ 1000 = Poin", fontSize = 11.sp, color = MediumText)
+                                    Text("📌 Rumus Poin", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Black.copy(alpha = 0.7f))
+                                    Text("Berat (g) × ${selectedWaste!!.pointsPerKg} ÷ 1000 = Poin", fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                                     Text("Contoh: 500g × ${selectedWaste!!.pointsPerKg} ÷ 1000 = ${(500 * selectedWaste!!.pointsPerKg / 1000)} poin",
-                                        fontSize = 11.sp, color = MediumText)
+                                        fontSize = 11.sp, color = Black.copy(alpha = 0.6f))
                                 }
                             }
                         }
@@ -261,7 +251,7 @@ fun AddTransactionScreen(
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(14.dp),
-                            color = SuccessGreenBg
+                            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
                         ) {
                             Row(
                                 modifier = Modifier.padding(16.dp),
@@ -269,14 +259,14 @@ fun AddTransactionScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column {
-                                    Text("Poin yang Didapat", fontSize = 13.sp, color = SuccessGreen)
+                                    Text("Poin yang Didapat", fontSize = 13.sp, color = Black)
                                     Text(
                                         "${weightGrams.toInt()} gram ${selectedWaste!!.name}",
                                         fontSize = 11.sp,
-                                        color = SuccessGreen.copy(alpha = 0.75f)
+                                        color = Black.copy(alpha = 0.6f)
                                     )
                                 }
-                                Text("+$pointsEarned", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, color = SuccessGreen)
+                                Text("+$pointsEarned", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
                             }
                         }
                     }
@@ -288,23 +278,23 @@ fun AddTransactionScreen(
                                 weightGrams < 100 -> weightError = "Berat minimal 100 gram"
                                 pointsEarned <= 0 -> weightError = "Berat terlalu kecil untuk mendapat poin"
                                 else -> {
-                                    viewModel.addTransaction(m, selectedWaste!!.name, weightGrams, selectedWaste!!.pointsPerKg)
+                                    viewModel.addTransaction(p, selectedWaste!!.name, weightGrams, selectedWaste!!.pointsPerKg)
                                     onNavigateBack()
                                 }
                             }
                         },
                         modifier = Modifier.fillMaxWidth().height(52.dp),
                         shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = RoseGoldDark)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                     ) {
-                        Text("♻️  Simpan Setoran", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text("✅  Simpan Setoran", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = White)
                     }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
             }
         } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = RoseGold)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -316,12 +306,13 @@ fun WasteTypeCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val borderColor = if (isSelected) RoseGold else Color.Transparent
-    val bgColor = if (isSelected) RoseGoldLight else BackgroundCream
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+    val bgColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
 
     Surface(
         modifier = modifier
             .heightIn(min = 110.dp)
+            .border(2.dp, borderColor, RoundedCornerShape(12.dp))
             .border(2.dp, borderColor, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
@@ -340,21 +331,21 @@ fun WasteTypeCard(
                 waste.name,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) RoseGoldDark else DarkText,
+                color = Black,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 maxLines = 2,
                 lineHeight = 14.sp
             )
             Spacer(modifier = Modifier.height(3.dp))
             Surface(
-                color = if (isSelected) RoseGold.copy(alpha = 0.15f) else MediumText.copy(alpha = 0.1f),
+                color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) else Black.copy(alpha = 0.05f),
                 shape = RoundedCornerShape(50)
             ) {
                 Text(
                     "${waste.pointsPerKg} poin/kg",
                     fontSize = 10.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (isSelected) RoseGoldDark else MediumText,
+                    color = if (isSelected) MaterialTheme.colorScheme.primary else Black.copy(alpha = 0.5f),
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                 )
             }

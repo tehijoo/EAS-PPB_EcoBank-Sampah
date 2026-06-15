@@ -7,13 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.registrasisiswa.ui.screens.AddMemberScreen
+import com.example.registrasisiswa.ui.screens.AddPenggunaScreen
 import com.example.registrasisiswa.ui.screens.AddTransactionScreen
 import com.example.registrasisiswa.ui.screens.AdminLoginScreen
 import com.example.registrasisiswa.ui.screens.HomeScreen
-import com.example.registrasisiswa.ui.screens.MemberCardScreen
-import com.example.registrasisiswa.ui.screens.MemberDetailScreen
-import com.example.registrasisiswa.ui.screens.NasabahLoginScreen
+import com.example.registrasisiswa.ui.screens.PenggunaCardScreen
+import com.example.registrasisiswa.ui.screens.PenggunaDetailScreen
+import com.example.registrasisiswa.ui.screens.PenggunaLoginScreen
 import com.example.registrasisiswa.ui.screens.RewardScreen
 import com.example.registrasisiswa.ui.screens.RoleSelectionScreen
 import com.example.registrasisiswa.ui.screens.SplashScreen
@@ -25,24 +25,24 @@ sealed class Screen(val route: String) {
     object Splash : Screen("splash")
     object RoleSelection : Screen("role_selection")
     object AdminLogin : Screen("admin_login")
-    object NasabahLogin : Screen("nasabah_login")
+    object PenggunaLogin : Screen("pengguna_login")
     object Home : Screen("home")
-    object AddMember : Screen("add_member")
+    object AddPengguna : Screen("add_pengguna")
     object WasteCatalog : Screen("waste_catalog")
-    object MemberDetail : Screen("member_detail/{memberId}") {
-        fun createRoute(memberId: Int) = "member_detail/$memberId"
+    object PenggunaDetail : Screen("pengguna_detail/{penggunaId}") {
+        fun createRoute(penggunaId: Int) = "pengguna_detail/$penggunaId"
     }
-    object MemberCard : Screen("member_card/{memberId}") {
-        fun createRoute(memberId: Int) = "member_card/$memberId"
+    object PenggunaCard : Screen("pengguna_card/{penggunaId}") {
+        fun createRoute(penggunaId: Int) = "pengguna_card/$penggunaId"
     }
-    object AddTransaction : Screen("add_transaction/{memberId}") {
-        fun createRoute(memberId: Int) = "add_transaction/$memberId"
+    object AddTransaction : Screen("add_transaction/{penggunaId}") {
+        fun createRoute(penggunaId: Int) = "add_transaction/$penggunaId"
     }
-    object TransactionHistory : Screen("transaction_history/{memberId}") {
-        fun createRoute(memberId: Int) = "transaction_history/$memberId"
+    object TransactionHistory : Screen("transaction_history/{penggunaId}") {
+        fun createRoute(penggunaId: Int) = "transaction_history/$penggunaId"
     }
-    object Reward : Screen("reward/{memberId}") {
-        fun createRoute(memberId: Int) = "reward/$memberId"
+    object Reward : Screen("reward/{penggunaId}") {
+        fun createRoute(penggunaId: Int) = "reward/$penggunaId"
     }
 }
 
@@ -64,7 +64,7 @@ fun AppNavGraph(
         composable(Screen.RoleSelection.route) {
             RoleSelectionScreen(
                 onNavigateToAdminLogin = { navController.navigate(Screen.AdminLogin.route) },
-                onNavigateToNasabahLogin = { navController.navigate(Screen.NasabahLogin.route) }
+                onNavigateToPenggunaLogin = { navController.navigate(Screen.PenggunaLogin.route) }
             )
         }
 
@@ -80,12 +80,12 @@ fun AppNavGraph(
             )
         }
 
-        composable(Screen.NasabahLogin.route) {
-            NasabahLoginScreen(
+        composable(Screen.PenggunaLogin.route) {
+            PenggunaLoginScreen(
                 viewModel = viewModel,
-                onLoginSuccess = { memberId ->
-                    navController.navigate(Screen.MemberDetail.createRoute(memberId)) {
-                        popUpTo(Screen.NasabahLogin.route) { inclusive = true }
+                onLoginSuccess = { penggunaId ->
+                    navController.navigate(Screen.PenggunaDetail.createRoute(penggunaId)) {
+                        popUpTo(Screen.PenggunaLogin.route) { inclusive = true }
                     }
                 },
                 onNavigateBack = { navController.popBackStack() }
@@ -95,11 +95,11 @@ fun AppNavGraph(
         composable(Screen.Home.route) {
             HomeScreen(
                 viewModel = viewModel,
-                onNavigateToAddMember = { navController.navigate(Screen.AddMember.route) },
+                onNavigateToAddPengguna = { navController.navigate(Screen.AddPengguna.route) },
                 onNavigateToWasteCatalog = { navController.navigate(Screen.WasteCatalog.route) },
-                onNavigateToMemberDetail = { memberId ->
-                    viewModel.selectMember(memberId)
-                    navController.navigate(Screen.MemberDetail.createRoute(memberId))
+                onNavigateToPenggunaDetail = { penggunaId ->
+                    viewModel.selectPengguna(penggunaId)
+                    navController.navigate(Screen.PenggunaDetail.createRoute(penggunaId))
                 },
                 onLogout = {
                     viewModel.logout()
@@ -108,8 +108,8 @@ fun AppNavGraph(
             )
         }
 
-        composable(Screen.AddMember.route) {
-            AddMemberScreen(
+        composable(Screen.AddPengguna.route) {
+            AddPenggunaScreen(
                 viewModel = viewModel,
                 onNavigateBack = { navController.popBackStack() }
             )
@@ -120,26 +120,26 @@ fun AppNavGraph(
         }
 
         composable(
-            route = Screen.MemberDetail.route,
-            arguments = listOf(navArgument("memberId") { type = NavType.IntType })
+            route = Screen.PenggunaDetail.route,
+            arguments = listOf(navArgument("penggunaId") { type = NavType.IntType })
         ) { backStackEntry ->
-            val memberId = backStackEntry.arguments?.getInt("memberId") ?: -1
-            MemberDetailScreen(
+            val penggunaId = backStackEntry.arguments?.getInt("penggunaId") ?: -1
+            PenggunaDetailScreen(
                 viewModel = viewModel,
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToMemberCard = { navController.navigate(Screen.MemberCard.createRoute(memberId)) },
-                onNavigateToAddTransaction = { navController.navigate(Screen.AddTransaction.createRoute(memberId)) },
-                onNavigateToTransactionHistory = { navController.navigate(Screen.TransactionHistory.createRoute(memberId)) },
-                onNavigateToReward = { navController.navigate(Screen.Reward.createRoute(memberId)) },
+                onNavigateToPenggunaCard = { navController.navigate(Screen.PenggunaCard.createRoute(penggunaId)) },
+                onNavigateToAddTransaction = { navController.navigate(Screen.AddTransaction.createRoute(penggunaId)) },
+                onNavigateToTransactionHistory = { navController.navigate(Screen.TransactionHistory.createRoute(penggunaId)) },
+                onNavigateToReward = { navController.navigate(Screen.Reward.createRoute(penggunaId)) },
                 onNavigateToWasteCatalog = { navController.navigate(Screen.WasteCatalog.route) }
             )
         }
 
         composable(
-            route = Screen.MemberCard.route,
-            arguments = listOf(navArgument("memberId") { type = NavType.IntType })
+            route = Screen.PenggunaCard.route,
+            arguments = listOf(navArgument("penggunaId") { type = NavType.IntType })
         ) {
-            MemberCardScreen(
+            PenggunaCardScreen(
                 viewModel = viewModel,
                 onNavigateBack = { navController.popBackStack() }
             )
@@ -147,7 +147,7 @@ fun AppNavGraph(
 
         composable(
             route = Screen.AddTransaction.route,
-            arguments = listOf(navArgument("memberId") { type = NavType.IntType })
+            arguments = listOf(navArgument("penggunaId") { type = NavType.IntType })
         ) {
             AddTransactionScreen(
                 viewModel = viewModel,
@@ -157,7 +157,7 @@ fun AppNavGraph(
 
         composable(
             route = Screen.TransactionHistory.route,
-            arguments = listOf(navArgument("memberId") { type = NavType.IntType })
+            arguments = listOf(navArgument("penggunaId") { type = NavType.IntType })
         ) {
             TransactionHistoryScreen(
                 viewModel = viewModel,
@@ -167,7 +167,7 @@ fun AppNavGraph(
 
         composable(
             route = Screen.Reward.route,
-            arguments = listOf(navArgument("memberId") { type = NavType.IntType })
+            arguments = listOf(navArgument("penggunaId") { type = NavType.IntType })
         ) {
             RewardScreen(
                 viewModel = viewModel,

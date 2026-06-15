@@ -29,27 +29,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.registrasisiswa.ui.theme.BackgroundCream
-import com.example.registrasisiswa.ui.theme.DarkText
-import com.example.registrasisiswa.ui.theme.MediumText
-import com.example.registrasisiswa.ui.theme.RoseGold
-import com.example.registrasisiswa.ui.theme.RoseGoldDark
-import com.example.registrasisiswa.ui.theme.RoseGoldDeep
-import com.example.registrasisiswa.ui.theme.RoseGoldLight
-import com.example.registrasisiswa.ui.theme.SuccessGreen
-import com.example.registrasisiswa.ui.theme.SuccessGreenBg
+import com.example.registrasisiswa.ui.theme.DashboardBg
+import com.example.registrasisiswa.ui.theme.PenggunaCardBg
+import com.example.registrasisiswa.ui.theme.PengelolaCardBg
+import com.example.registrasisiswa.ui.theme.White
+import com.example.registrasisiswa.ui.theme.Black
 
 @Composable
 fun RoleSelectionScreen(
     onNavigateToAdminLogin: () -> Unit,
-    onNavigateToNasabahLogin: () -> Unit
+    onNavigateToPenggunaLogin: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
     val alpha by animateFloatAsState(
@@ -68,11 +62,7 @@ fun RoleSelectionScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(RoseGoldDeep, RoseGoldDark, RoseGold, RoseGoldLight, BackgroundCream)
-                )
-            )
+            .background(DashboardBg)
     ) {
         Column(
             modifier = Modifier
@@ -84,19 +74,18 @@ fun RoleSelectionScreen(
             verticalArrangement = Arrangement.Center
         ) {
             // Header
-            Text("♻️", fontSize = 64.sp)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             Text(
                 "ECOBANK",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color.White,
+                color = White,
                 letterSpacing = 4.sp
             )
             Text(
                 "Bank Sampah Digital",
                 fontSize = 13.sp,
-                color = Color.White.copy(alpha = 0.8f),
+                color = White.copy(alpha = 0.8f),
                 letterSpacing = 1.sp
             )
 
@@ -105,7 +94,7 @@ fun RoleSelectionScreen(
             Text(
                 "Sampah Jadi Poin, Bumi Jadi Bersih",
                 fontSize = 12.sp,
-                color = Color.White.copy(alpha = 0.65f),
+                color = White.copy(alpha = 0.65f),
                 fontStyle = FontStyle.Italic
             )
 
@@ -114,7 +103,7 @@ fun RoleSelectionScreen(
             Text(
                 "Masuk sebagai",
                 fontSize = 14.sp,
-                color = Color.White.copy(alpha = 0.85f),
+                color = White.copy(alpha = 0.85f),
                 fontWeight = FontWeight.Medium
             )
 
@@ -124,24 +113,24 @@ fun RoleSelectionScreen(
             RoleCard(
                 emoji = "🏢",
                 title = "Pengelola",
-                subtitle = "Kelola semua nasabah & transaksi",
-                backgroundColor = Color.White,
-                titleColor = RoseGoldDark,
-                subtitleColor = MediumText,
+                subtitle = "Kelola semua pengguna & transaksi",
+                backgroundColor = PengelolaCardBg,
+                titleColor = Black,
+                subtitleColor = Black.copy(alpha = 0.7f),
                 onClick = onNavigateToAdminLogin
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Nasabah card
+            // Pengguna card
             RoleCard(
                 emoji = "👤",
-                title = "Nasabah",
+                title = "Pengguna",
                 subtitle = "Lihat poin & riwayat setor saya",
-                backgroundColor = SuccessGreenBg,
-                titleColor = SuccessGreen,
-                subtitleColor = SuccessGreen.copy(alpha = 0.75f),
-                onClick = onNavigateToNasabahLogin
+                backgroundColor = PenggunaCardBg,
+                titleColor = Black,
+                subtitleColor = Black.copy(alpha = 0.7f),
+                onClick = onNavigateToPenggunaLogin
             )
 
             Spacer(modifier = Modifier.height(48.dp))
@@ -149,7 +138,7 @@ fun RoleSelectionScreen(
             Text(
                 "v1.0  •  EcoBank © 2025",
                 fontSize = 11.sp,
-                color = Color.White.copy(alpha = 0.4f)
+                color = White.copy(alpha = 0.4f)
             )
         }
     }
@@ -183,7 +172,7 @@ fun RoleCard(
             },
         shape = RoundedCornerShape(20.dp),
         color = backgroundColor,
-        shadowElevation = 6.dp
+        shadowElevation = 4.dp
     ) {
         Row(
             modifier = Modifier.padding(20.dp),
@@ -192,7 +181,7 @@ fun RoleCard(
             Box(
                 modifier = Modifier
                     .size(56.dp)
-                    .background(titleColor.copy(alpha = 0.12f), RoundedCornerShape(16.dp)),
+                    .background(titleColor.copy(alpha = 0.08f), RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(emoji, fontSize = 28.sp)
