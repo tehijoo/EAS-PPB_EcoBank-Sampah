@@ -21,36 +21,36 @@ Program bank sampah merupakan salah satu upaya pengelolaan sampah berbasis masya
 
 - Kartu fisik mudah hilang atau rusak
 - Pencatatan poin dan transaksi dilakukan secara manual sehingga rawan kesalahan
-- Nasabah tidak dapat memantau saldo poin secara real-time
+- User tidak dapat memantau saldo poin secara real-time
 - Membutuhkan biaya cetak dan operasional administrasi yang tidak efisien
 
-Berdasarkan latar belakang tersebut, dikembangkan aplikasi **EcoBank** — sebuah platform digital untuk bank sampah yang memungkinkan pengelolaan nasabah, pencatatan setoran sampah, sistem poin otomatis, dan penukaran reward, seluruhnya dalam genggaman pengguna melalui smartphone Android.
+Berdasarkan latar belakang tersebut, dikembangkan aplikasi **EcoBank** — sebuah platform digital untuk bank sampah yang memungkinkan pengelolaan user, pencatatan setoran sampah, sistem poin otomatis, dan penukaran reward, seluruhnya dalam genggaman pengguna melalui smartphone Android.
 
 ### 1.2 Tujuan
 
 Membangun aplikasi Android yang memungkinkan:
 
-1. Registrasi dan pengelolaan data nasabah bank sampah
-2. Penyimpanan data nasabah dan transaksi secara lokal menggunakan Room Database
-3. Kartu membership digital untuk setiap nasabah
+1. Registrasi dan pengelolaan data user bank sampah
+2. Penyimpanan data user dan transaksi secara lokal menggunakan Room Database
+3. Kartu membership digital untuk setiap user
 4. Sistem poin otomatis berdasarkan jenis dan berat sampah yang disetorkan
 5. Riwayat transaksi setor sampah dan penukaran reward
 6. Penukaran poin dengan berbagai reward (kebutuhan rumah tangga dan e-money)
-7. Akses berbasis peran: Pengelola (admin) dan Nasabah (member)
+7. Akses berbasis peran: Pengelola (admin) dan User (member)
 
 ---
 
 ## 2. Ruang Lingkup (Scope)
 
 ### In Scope (Fitur yang Diimplementasikan)
-- Registrasi Nasabah (Member)
+- Registrasi User (Member)
 - Dashboard Pengelola
 - Kartu Membership Digital
 - Sistem Poin Otomatis
 - Riwayat Transaksi
 - Penukaran Reward
 - Room Database (penyimpanan lokal)
-- Role-Based Access (Pengelola vs Nasabah)
+- Role-Based Access (Pengelola vs User)
 - Katalog Sampah (8 jenis sampah + nilai poin)
 
 ### Out of Scope (Tidak Diimplementasikan)
@@ -107,7 +107,7 @@ Aplikasi mengikuti pola arsitektur **MVVM (Model-View-ViewModel)** dengan **Repo
 |  - Menyimpan UI state (StateFlow)                         |
 |  - Mengatur business logic tingkat UI                     |
 |  - Memanggil Repository untuk operasi data                |
-|  - Mengelola auth state (UserRole: ADMIN / NASABAH)       |
+|  - Mengelola auth state (UserRole: ADMIN / USER)          |
 +----------------------------+------------------------------+
                              | calls suspend functions
                              v
@@ -125,7 +125,7 @@ Aplikasi mengikuti pola arsitektur **MVVM (Model-View-ViewModel)** dengan **Repo
 |                    DATABASE LAYER                         |
 |                                                           |
 |  Room Database (AppDatabase.kt)                           |
-|  - MemberDao: CRUD nasabah, Flow queries                  |
+|  - MemberDao: CRUD user, Flow queries                     |
 |  - TransactionDao: Insert & query transaksi               |
 |  - Tabel: members, transactions                           |
 +-----------------------------------------------------------+
@@ -154,7 +154,7 @@ val currentMember = _currentMemberId.flatMapLatest { id ->
 }
 ```
 
-Ini memastikan ketika nasabah yang dipilih berubah, data yang ditampilkan ikut berubah secara reaktif tanpa perlu memanggil ulang secara manual.
+Ini memastikan ketika user yang dipilih berubah, data yang ditampilkan ikut berubah secara reaktif tanpa perlu memanggil ulang secara manual.
 
 ---
 
@@ -181,7 +181,7 @@ Ini memastikan ketika nasabah yang dipilih berubah, data yang ditampilkan ikut b
 #### Tabel `members`
 | Field | Type | Constraint | Keterangan |
 |---|---|---|---|
-| id | INTEGER | PK, AUTO | ID unik nasabah |
+| id | INTEGER | PK, AUTO | ID unik user |
 | name | TEXT | NOT NULL | Nama lengkap |
 | email | TEXT | NOT NULL | Alamat email |
 | phone | TEXT | NOT NULL | Nomor HP |
@@ -196,7 +196,7 @@ Ini memastikan ketika nasabah yang dipilih berubah, data yang ditampilkan ikut b
 | Field | Type | Constraint | Keterangan |
 |---|---|---|---|
 | id | INTEGER | PK, AUTO | ID unik transaksi |
-| memberId | INTEGER | FK | Relasi ke nasabah |
+| memberId | INTEGER | FK | Relasi ke user |
 | amount | REAL | NOT NULL | Berat (gram) untuk SETOR; 0 untuk REDEEM |
 | pointEarned | INTEGER | NOT NULL | Poin didapat / dipakai |
 | date | TEXT | NOT NULL | Waktu transaksi (dd/MM/yyyy HH:mm) |
@@ -231,15 +231,15 @@ pointEarned = (500 * 50) / 1000 = 25 poin
 PPB-Tugas-13-Registrasi-Siswa-/
 |-- README.md
 |-- LAPORAN.md
-|-- build.gradle.kts                    (root build file)
+|-- build.gradle.kts
 |-- settings.gradle.kts
 |-- gradle.properties
 |
 +-- app/
-    |-- build.gradle.kts                (dependencies & build config)
+    |-- build.gradle.kts
     |
     +-- src/main/
-        |-- AndroidManifest.xml         (deklarasi Activity, launcher, theme)
+        |-- AndroidManifest.xml
         |
         +-- java/com/example/registrasisiswa/
         |   |
@@ -257,7 +257,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |   |   +-- entity/
         |   |   |   |-- Member.kt
         |   |   |   |   Fungsi: @Entity untuk tabel "members". Berisi field data
-        |   |   |   |   nasabah dan extension functions formattedId() & level().
+        |   |   |   |   user dan extension functions formattedId() & level().
         |   |   |   |
         |   |   |   +-- Transaction.kt
         |   |   |       Fungsi: @Entity untuk tabel "transactions". Menyimpan
@@ -265,7 +265,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |   |   |
         |   |   +-- dao/
         |   |   |   |-- MemberDao.kt
-        |   |   |   |   Fungsi: @Dao untuk operasi CRUD nasabah.
+        |   |   |   |   Fungsi: @Dao untuk operasi CRUD user.
         |   |   |   |   Queries: getAllMembers() (Flow), getMemberById() (Flow),
         |   |   |   |   getTotalMembers() (Flow), insertMember (returns Long),
         |   |   |   |   updateMember, deleteMember.
@@ -278,19 +278,19 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |   |       +-- EcoBankRepository.kt
         |   |           Fungsi: Abstraksi akses data + business logic.
         |   |           - addWasteTransaction(): hitung poin, insert transaksi,
-        |   |             update poin nasabah dalam 1 coroutine scope.
+        |   |             update poin user dalam 1 coroutine scope.
         |   |           - redeemReward(): validasi poin cukup, insert REDEEM,
-        |   |             kurangi poin nasabah. Return Boolean sukses/gagal.
-        |   |           - insertMemberAndGetId(): insert nasabah + return ID baru.
+        |   |             kurangi poin user. Return Boolean sukses/gagal.
+        |   |           - insertMemberAndGetId(): insert user + return ID baru.
         |   |
         |   +-- viewmodel/
         |   |   +-- EcoBankViewModel.kt
         |   |       Fungsi: Bridge antara UI dan Repository.
-        |   |       - UserRole enum (ADMIN, NASABAH)
+        |   |       - UserRole enum (ADMIN, USER)
         |   |       - StateFlows: allMembers, totalMembers, userRole,
         |   |         currentMember, currentTransactions, uiMessage
-        |   |       - Auth: loginAsAdmin(), loginAsNasabah(), logout()
-        |   |       - registerAndLoginAsNasabah(): daftar + auto-login nasabah
+        |   |       - Auth: loginAsAdmin(), loginAsUser(), logout()
+        |   |       - registerAndLoginAsUser(): daftar + auto-login user
         |   |       - CRUD: addMember(), deleteMember()
         |   |       - Transaksi: addTransaction(), redeemReward()
         |   |       - EcoBankViewModelFactory (manual DI)
@@ -318,8 +318,8 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |       |   |   Navigasi: Otomatis ke RoleSelection setelah 2 detik
         |       |   |
         |       |   +-- RoleSelectionScreen.kt
-        |       |   |   Tampil: Dua kartu role (Pengelola / Nasabah)
-        |       |   |   Aksi: Navigasi ke AdminLogin atau NasabahLogin
+        |       |   |   Tampil: Dua kartu role (Pengelola / User)
+        |       |   |   Aksi: Navigasi ke AdminLogin atau UserLogin
         |       |   |
         |       |   +-- AdminLoginScreen.kt
         |       |   |   Tampil: Form username + password dengan show/hide
@@ -328,12 +328,12 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |       |   |
         |       |   +-- NasabahLoginScreen.kt
         |       |   |   Tampil: TabRow dengan 2 tab (Masuk / Daftar Baru)
-        |       |   |   Tab Masuk: Search nasabah by nama/ID, tap untuk login
-        |       |   |   Tab Daftar: Form nama+email+HP, registerAndLoginAsNasabah()
+        |       |   |   Tab Masuk: Search user by nama/ID, tap untuk login
+        |       |   |   Tab Daftar: Form nama+email+HP, registerAndLoginAsUser()
         |       |   |
         |       |   +-- HomeScreen.kt
-        |       |   |   Tampil: Total nasabah, list semua nasabah (LazyColumn)
-        |       |   |   Aksi: FAB tambah nasabah, tap item ke detail, logout
+        |       |   |   Tampil: Total user, list semua user (LazyColumn)
+        |       |   |   Aksi: FAB tambah user, tap item ke detail, logout
         |       |   |
         |       |   +-- AddMemberScreen.kt
         |       |   |   Tampil: Form nama, email, nomor HP
@@ -344,7 +344,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |       |   |   Tampil: Header profile (avatar, nama, ID, poin, level)
         |       |   |   Grid 2x2: Kartu Member, Setor Sampah, Riwayat, Reward
         |       |   |   Full-width: Katalog Sampah
-        |       |   |   Role-aware: Admin dapat hapus; Nasabah dapat logout
+        |       |   |   Role-aware: Admin dapat hapus; User dapat logout
         |       |   |
         |       |   +-- MemberCardScreen.kt
         |       |   |   Tampil: Kartu member digital bergaya kartu kredit
@@ -353,7 +353,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |       |   +-- AddTransactionScreen.kt
         |       |   |   Tampil: Grid 2 kolom pilihan jenis sampah (8 item)
         |       |   |   Input: Berat sampah dalam gram
-        |       |   |   Aksi: addTransaction() → poin otomatis dihitung
+        |       |   |   Aksi: addTransaction() -> poin otomatis dihitung
         |       |   |
         |       |   +-- TransactionHistoryScreen.kt
         |       |   |   Tampil: Summary (total poin, jumlah setor, total kg)
@@ -366,7 +366,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
         |       |   |
         |       |   +-- WasteCatalogScreen.kt
         |       |       Tampil: List 8 jenis sampah dengan poin/kg dan deskripsi
-        |       |       Akses: Dari HomeScreen (admin) dan MemberDetailScreen (nasabah)
+        |       |       Akses: Dari HomeScreen (admin) dan MemberDetailScreen (user)
         |       |
         |       +-- theme/
         |           +-- Color.kt         Palet warna: rose gold (#BF7182), cream, dll
@@ -399,16 +399,16 @@ PPB-Tugas-13-Registrasi-Siswa-/
 | Komponen | File | Detail |
 |---|---|---|
 | Form UI (Admin) | `AddMemberScreen.kt` | OutlinedTextField untuk nama, email, HP; validasi semua field wajib + format email |
-| Form UI (Nasabah) | `NasabahLoginScreen.kt` | Tab "Daftar Baru" dengan form yang sama; auto-login setelah daftar |
-| Business logic | `EcoBankViewModel.kt` | `addMember()` dan `registerAndLoginAsNasabah()` |
+| Form UI (User) | `NasabahLoginScreen.kt` | Tab "Daftar Baru" dengan form yang sama; auto-login setelah daftar |
+| Business logic | `EcoBankViewModel.kt` | `addMember()` dan `registerAndLoginAsUser()` |
 | Penyimpanan | `MemberDao.kt` | `insertMember(member): Long` |
-| Repository | `EcoBankRepository.kt` | `insertMemberAndGetId()` mengembalikan ID nasabah baru |
+| Repository | `EcoBankRepository.kt` | `insertMemberAndGetId()` mengembalikan ID user baru |
 
 **Acceptance Criteria:**
 - [x] Semua field wajib diisi — divalidasi sebelum submit
 - [x] Email harus valid — dicek dengan `.contains("@")`
 - [x] Data member tersimpan — via Room + DAO
-- [x] Nasabah langsung login setelah daftar — via `registerAndLoginAsNasabah()`
+- [x] User langsung login setelah daftar — via `registerAndLoginAsUser()`
 
 ---
 
@@ -420,7 +420,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
 
 | Komponen | File | Detail |
 |---|---|---|
-| UI | `HomeScreen.kt` | `LazyColumn` menampilkan semua nasabah |
+| UI | `HomeScreen.kt` | `LazyColumn` menampilkan semua user |
 | State | `EcoBankViewModel.kt` | `allMembers: StateFlow<List<Member>>` |
 | Query | `MemberDao.kt` | `getAllMembers(): Flow<List<Member>>` (ORDER BY id DESC) |
 | Count | `MemberDao.kt` | `getTotalMembers(): Flow<Int>` untuk header dashboard |
@@ -444,7 +444,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
 | ID Format | `Member.kt` | Extension: `formattedId()` → "NSB00001" |
 | Level | `Member.kt` | Extension: `level()` → "Pemula" / "Aktif" / "Champion" |
 | Data sumber | `EcoBankViewModel.kt` | `currentMember: StateFlow<Member?>` |
-| Navigasi | `MemberDetailScreen.kt` | Tombol "Kartu Nasabah" → MemberCardScreen |
+| Navigasi | `MemberDetailScreen.kt` | Tombol "Kartu Member" → MemberCardScreen |
 
 **Acceptance Criteria:**
 - [x] Data tampil sesuai database — kartu menampilkan data real-time dari `currentMember`
@@ -460,7 +460,7 @@ PPB-Tugas-13-Registrasi-Siswa-/
 
 **Formula:**
 ```
-poin = (beratGram × pointsPerKg) / 1000
+poin = (beratGram x pointsPerKg) / 1000
 ```
 
 **Implementasi:**
@@ -548,12 +548,12 @@ poin = (beratGram × pointsPerKg) / 1000
         +----------------+
         |                |
         v                v
-[Admin Login]     [Nasabah Login]
+[Admin Login]       [User Login]
         |                |
         v                +-- Tab: Masuk (cari akun)
-[Home Screen]     |      +-- Tab: Daftar Baru (form)
-   |  |  |        |
-   |  |  +- FAB   v
+[Home Screen]            +-- Tab: Daftar Baru (form)
+   |  |  |                        |
+   |  |  +- FAB                   v
    |  |    [Add Member]     [Member Detail]
    |  |                          |
    |  +---> [Waste Catalog]      +---> [Member Card]
@@ -575,7 +575,7 @@ poin = (beratGram × pointsPerKg) / 1000
 | `splash` | SplashScreen | - |
 | `role_selection` | RoleSelectionScreen | - |
 | `admin_login` | AdminLoginScreen | - |
-| `nasabah_login` | NasabahLoginScreen | - |
+| `nasabah_login` | UserLoginScreen | - |
 | `home` | HomeScreen | - |
 | `add_member` | AddMemberScreen | - |
 | `waste_catalog` | WasteCatalogScreen | - |
@@ -587,7 +587,7 @@ poin = (beratGram × pointsPerKg) / 1000
 
 ### Manajemen Backstack
 - **Login admin** → `popUpTo(RoleSelection)` agar back dari Home tidak kembali ke Login
-- **Login nasabah** → `popUpTo(NasabahLogin) { inclusive = true }` sehingga back dari Detail ke RoleSelection
+- **Login user** → `popUpTo(UserLogin) { inclusive = true }` sehingga back dari Detail ke RoleSelection
 - **Logout** → `navController.popBackStack(Screen.RoleSelection.route, false)` kembali ke pemilihan role
 
 ---
@@ -600,51 +600,51 @@ poin = (beratGram × pointsPerKg) / 1000
 - **Transisi:** Otomatis ke RoleSelection setelah 2 detik
 
 ### 2. Role Selection Screen
-- **Fungsi:** User memilih akan masuk sebagai Pengelola atau Nasabah
+- **Fungsi:** Pengguna memilih akan masuk sebagai Pengelola atau User
 - **UI:** Dua kartu dengan ikon, deskripsi peran, dan animasi fade-in
 - **Tujuan:** Memisahkan akses fitur berdasarkan peran pengguna
 
 ### 3. Admin Login Screen
 - **Fungsi:** Autentikasi pengelola bank sampah
 - **UI:** Field username + password dengan toggle show/hide
-- **Keamanan:** Kredensial hardcoded, tidak ditampilkan di UI (hint card dihapus)
+- **Keamanan:** Kredensial hardcoded, tidak ditampilkan di UI
 - **Validasi:** Pesan error inline jika salah username/password
 
-### 4. Nasabah Login Screen
-- **Fungsi:** Login atau registrasi nasabah baru
-- **Tab Masuk:** Search bar untuk cari nasabah by nama/ID → tampil list → tap untuk login
-- **Tab Daftar:** Form nama, email, HP → `registerAndLoginAsNasabah()` → auto-login
-- **Edge case:** Jika belum ada nasabah, tampil pesan kosong
+### 4. User Login Screen
+- **Fungsi:** Login atau registrasi user baru
+- **Tab Masuk:** Search bar untuk cari user by nama/ID → tampil list → tap untuk login
+- **Tab Daftar:** Form nama, email, HP → `registerAndLoginAsUser()` → auto-login
+- **Edge case:** Jika belum ada user, tampil pesan kosong
 
 ### 5. Home Screen (Dashboard Admin)
-- **Fungsi:** Overview semua nasabah bank sampah
-- **UI:** Card statistik total nasabah + LazyColumn daftar nasabah
-- **Aksi:** FAB tambah nasabah, tap nasabah ke Detail, icon logout
+- **Fungsi:** Overview semua user bank sampah
+- **UI:** Card statistik total user + LazyColumn daftar user
+- **Aksi:** FAB tambah user, tap user ke Detail, icon logout
 
 ### 6. Add Member Screen
-- **Fungsi:** Formulir pendaftaran nasabah baru oleh admin
+- **Fungsi:** Formulir pendaftaran user baru oleh admin
 - **Input:** Nama, email, nomor HP
 - **Validasi:** Semua field wajib, email format, nomor HP minimal 9 digit
 
 ### 7. Member Detail Screen
-- **Fungsi:** Halaman utama profil nasabah dengan semua menu aksi
+- **Fungsi:** Halaman utama profil user dengan semua menu aksi
 - **Header:** Avatar inisial, nama, ID (NSB format), poin, level dengan emoji
 - **Menu:** Grid 2x2 (Kartu, Setor, Riwayat, Reward) + full-width Katalog Sampah
-- **Role-aware:** Admin: tombol hapus; Nasabah: tombol logout
+- **Role-aware:** Admin: tombol hapus; User: tombol logout
 
 ### 8. Member Card Screen
 - **Fungsi:** Kartu membership digital bergaya kartu perbankan
-- **Info:** Nama nasabah, ID (NSBxxxxx), level, total poin, tanggal bergabung
+- **Info:** Nama user, ID (NSBxxxxx), level, total poin, tanggal bergabung
 - **Desain:** Gradient rose gold, chip "MEMBER"
 
 ### 9. Add Transaction Screen
-- **Fungsi:** Mencatat setoran sampah nasabah
+- **Fungsi:** Mencatat setoran sampah user
 - **UI:** Grid pilihan jenis sampah (8 item dengan emoji + nilai poin)
 - **Input:** Berat sampah dalam gram
 - **Preview:** Estimasi poin yang akan didapat ditampilkan sebelum konfirmasi
 
 ### 10. Transaction History Screen
-- **Fungsi:** Riwayat lengkap semua transaksi nasabah
+- **Fungsi:** Riwayat lengkap semua transaksi user
 - **Header:** Ringkasan (total poin, jumlah setor, total berat kg)
 - **List:** Badge hijau SETOR / merah REDEEM, nama item, poin, tanggal
 
@@ -655,19 +655,17 @@ poin = (beratGram × pointsPerKg) / 1000
 
 ### 12. Waste Catalog Screen
 - **Fungsi:** Referensi jenis sampah yang diterima dan nilai poinnya
-- **Akses:** Dari HomeScreen (admin) DAN MemberDetailScreen (nasabah)
+- **Akses:** Dari HomeScreen (admin) DAN MemberDetailScreen (user)
 - **Info per item:** Emoji, nama, nilai poin/kg, deskripsi
 
 ---
 
 ## 11. Fitur Tambahan (Beyond PRD)
 
-Berikut fitur yang ditambahkan melebihi requirement dasar PRD:
-
 | Fitur | Deskripsi |
 |---|---|
-| Role-Based Access | Pemisahan akses Pengelola vs Nasabah dengan auth masing-masing |
-| Nasabah Self-Register | Nasabah dapat mendaftar sendiri tanpa melalui admin |
+| Role-Based Access | Pemisahan akses Pengelola vs User dengan auth masing-masing |
+| User Self-Register | User dapat mendaftar sendiri tanpa melalui admin |
 | Sistem Level | Level otomatis naik (Pemula/Aktif/Champion) berdasarkan total poin |
 | Katalog Sampah | 8 jenis sampah dengan nilai poin berbeda-beda |
 | Reward Beragam | 7 jenis reward (kebutuhan RT + e-money) vs 3 reward di PRD |
