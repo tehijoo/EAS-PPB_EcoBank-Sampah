@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Recycling
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -75,6 +78,13 @@ fun RoleSelectionScreen(
         ) {
             // Header
             Spacer(modifier = Modifier.height(40.dp))
+            Icon(
+                imageVector = Icons.Default.Recycling,
+                contentDescription = "Recycle",
+                tint = Color(0xFF1E3D10),
+                modifier = Modifier.size(64.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 "ECOBANK",
                 fontSize = 28.sp,
